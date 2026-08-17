@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hinges</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Hinges</h1>
+    <p>Van Stock</p>
+</div>
+
+<div class="container">
+
+    <button class="menu-button" onclick="window.location='index.html'">
+        ← Back
+    </button>
+
+    <!-- 13mm HINGES -->
+    <h2>13mm Friction Stay</h2>
+
+    <div class="stock-item">
+        <span>8"</span>
+        <button onclick="changeQty('hinge8', -1)">-</button>
+        <span class="qty" id="hinge8">0</span>
+        <button onclick="changeQty('hinge8', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>10"</span>
+        <button onclick="changeQty('hinge10', -1)">-</button>
+        <span class="qty" id="hinge10">0</span>
+        <button onclick="changeQty('hinge10', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>12"</span>
+        <button onclick="changeQty('hinge12', -1)">-</button>
+        <span class="qty" id="hinge12">0</span>
+        <button onclick="changeQty('hinge12', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>16"</span>
+        <button onclick="changeQty('hinge16', -1)">-</button>
+        <span class="qty" id="hinge16">0</span>
+        <button onclick="changeQty('hinge16', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>20"</span>
+        <button onclick="changeQty('hinge20', -1)">-</button>
+        <span class="qty" id="hinge20">0</span>
+        <button onclick="changeQty('hinge20', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>24"</span>
+        <button onclick="changeQty('hinge24', -1)">-</button>
+        <span class="qty" id="hinge24">0</span>
+        <button onclick="changeQty('hinge24', 1)">+</button>
+    </div>
+
+
+    <!-- 17mm HINGES -->
+    <h2>17mm Friction Stay</h2>
+
+    <div class="stock-item">
+        <span>8"</span>
+        <button onclick="changeQty('hinge17_8', -1)">-</button>
+        <span class="qty" id="hinge17_8">0</span>
+        <button onclick="changeQty('hinge17_8', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>10"</span>
+        <button onclick="changeQty('hinge17_10', -1)">-</button>
+        <span class="qty" id="hinge17_10">0</span>
+        <button onclick="changeQty('hinge17_10', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>12"</span>
+        <button onclick="changeQty('hinge17_12', -1)">-</button>
+        <span class="qty" id="hinge17_12">0</span>
+        <button onclick="changeQty('hinge17_12', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>16"</span>
+        <button onclick="changeQty('hinge17_16', -1)">-</button>
+        <span class="qty" id="hinge17_16">0</span>
+        <button onclick="changeQty('hinge17_16', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>20"</span>
+        <button onclick="changeQty('hinge17_20', -1)">-</button>
+        <span class="qty" id="hinge17_20">0</span>
+        <button onclick="changeQty('hinge17_20', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>24"</span>
+        <button onclick="changeQty('hinge17_24', -1)">-</button>
+        <span class="qty" id="hinge17_24">0</span>
+        <button onclick="changeQty('hinge17_24', 1)">+</button>
+    </div>
+
+
+    <!-- FIRE EGRESS HINGES -->
+    <h2>Fire Egress Hinges</h2>
+
+    <div class="stock-item">
+        <span>12"</span>
+        <button onclick="changeQty('fire12', -1)">-</button>
+        <span class="qty" id="fire12">0</span>
+        <button onclick="changeQty('fire12', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>16"</span>
+        <button onclick="changeQty('fire16', -1)">-</button>
+        <span class="qty" id="fire16">0</span>
+        <button onclick="changeQty('fire16', 1)">+</button>
+    </div>
+
+<h2>Additional Hinges</h2>
+
+<div id="hinges-extras"></div>
+
+<button class="menu-button" onclick="addExtra('hinges')">
+    ＋ Add Extra Hinge
+</button>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Window Handles</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Window Handles</h1>
+    <p>Van Stock</p>
+</div>
+
+<div class="container">
+
+    <button class="menu-button" onclick="window.location='index.html'">
+        ← Back
+    </button>
+
+    <h2>White</h2>
+
+    <div class="stock-item">
+        <span>In-line</span>
+        <button onclick="changeQty('handle_white_inline', -1)">-</button>
+        <span class="qty" id="handle_white_inline">0</span>
+        <button onclick="changeQty('handle_white_inline', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>Left Hand</span>
+        <button onclick="changeQty('handle_white_left', -1)">-</button>
+        <span class="qty" id="handle_white_left">0</span>
+        <button onclick="changeQty('handle_white_left', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>Right Hand</span>
+        <button onclick="changeQty('handle_white_right', -1)">-</button>
+        <span class="qty" id="handle_white_right">0</span>
+        <button onclick="changeQty('handle_white_right', 1)">+</button>
+    </div>
+
+    <h2>Chrome</h2>
+
+    <div class="stock-item">
+        <span>In-line</span>
+        <button onclick="changeQty('handle_chrome_inline', -1)">-</button>
+        <span class="qty" id="handle_chrome_inline">0</span>
+        <button onclick="changeQty('handle_chrome_inline', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>Left Hand</span>
+        <button onclick="changeQty('handle_chrome_left', -1)">-</button>
+        <span class="qty" id="handle_chrome_left">0</span>
+        <button onclick="changeQty('handle_chrome_left', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>Right Hand</span>
+        <button onclick="changeQty('handle_chrome_right', -1)">-</button>
+        <span class="qty" id="handle_chrome_right">0</span>
+        <button onclick="changeQty('handle_chrome_right', 1)">+</button>
+    </div>
+
+    <h2>Gold</h2>
+
+    <div class="stock-item">
+        <span>In-line</span>
+        <button onclick="changeQty('handle_gold_inline', -1)">-</button>
+        <span class="qty" id="handle_gold_inline">0</span>
+        <button onclick="changeQty('handle_gold_inline', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>Left Hand</span>
+        <button onclick="changeQty('handle_gold_left', -1)">-</button>
+        <span class="qty" id="handle_gold_left">0</span>
+        <button onclick="changeQty('handle_gold_left', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>Right Hand</span>
+        <button onclick="changeQty('handle_gold_right', -1)">-</button>
+        <span class="qty" id="handle_gold_right">0</span>
+        <button onclick="changeQty('handle_gold_right', 1)">+</button>
+    </div>
+
+    <h2>Additional Window Handles</h2>
+
+<div id="handles-extras"></div>
+
+<button class="menu-button" onclick="addExtra('handles')">
+    ＋ Add Extra Handle
+</button>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

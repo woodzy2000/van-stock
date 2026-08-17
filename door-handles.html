@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Door Handles</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Door Handles</h1>
+    <p>Van Stock</p>
+</div>
+
+<div class="container">
+
+    <button class="menu-button" onclick="window.location='index.html'">
+        ← Back
+    </button>
+
+    <h2>White Lever / Lever</h2>
+
+    <div class="stock-item">
+        <span>122</span>
+        <button onclick="changeQty('door122', -1)">-</button>
+        <span class="qty" id="door122">0</span>
+        <button onclick="changeQty('door122', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>210</span>
+        <button onclick="changeQty('door210', -1)">-</button>
+        <span class="qty" id="door210">0</span>
+        <button onclick="changeQty('door210', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>215</span>
+        <button onclick="changeQty('door215', -1)">-</button>
+        <span class="qty" id="door215">0</span>
+        <button onclick="changeQty('door215', 1)">+</button>
+    </div>
+
+    <h2>Additional Door Handles</h2>
+
+    <div id="door-handles-extras"></div>
+
+    <button class="menu-button" onclick="addExtra('door-handles')">
+        ＋ Add Extra Door Handle
+    </button>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

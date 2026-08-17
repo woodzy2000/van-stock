@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Euro Cylinders</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Euro Cylinders</h1>
+    <p>Van Stock</p>
+</div>
+
+<div class="container">
+
+    <button class="menu-button" onclick="window.location='index.html'">
+        ← Back
+    </button>
+
+    <h2>Euro Cylinders</h2>
+
+    <div class="stock-item">
+        <span>30/30</span>
+        <button onclick="changeQty('euro3030', -1)">-</button>
+        <span class="qty" id="euro3030">0</span>
+        <button onclick="changeQty('euro3030', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>35/35</span>
+        <button onclick="changeQty('euro3535', -1)">-</button>
+        <span class="qty" id="euro3535">0</span>
+        <button onclick="changeQty('euro3535', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>40/40</span>
+        <button onclick="changeQty('euro4040', -1)">-</button>
+        <span class="qty" id="euro4040">0</span>
+        <button onclick="changeQty('euro4040', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>40/45</span>
+        <button onclick="changeQty('euro4045', -1)">-</button>
+        <span class="qty" id="euro4045">0</span>
+        <button onclick="changeQty('euro4045', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>40/50</span>
+        <button onclick="changeQty('euro4050', -1)">-</button>
+        <span class="qty" id="euro4050">0</span>
+        <button onclick="changeQty('euro4050', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>40/55</span>
+        <button onclick="changeQty('euro4055', -1)">-</button>
+        <span class="qty" id="euro4055">0</span>
+        <button onclick="changeQty('euro4055', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>45/45</span>
+        <button onclick="changeQty('euro4545', -1)">-</button>
+        <span class="qty" id="euro4545">0</span>
+        <button onclick="changeQty('euro4545', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>45/50</span>
+        <button onclick="changeQty('euro4550', -1)">-</button>
+        <span class="qty" id="euro4550">0</span>
+        <button onclick="changeQty('euro4550', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>45/55</span>
+        <button onclick="changeQty('euro4555', -1)">-</button>
+        <span class="qty" id="euro4555">0</span>
+        <button onclick="changeQty('euro4555', 1)">+</button>
+    </div>
+
+    <div class="stock-item">
+        <span>50/50</span>
+        <button onclick="changeQty('euro5050', -1)">-</button>
+        <span class="qty" id="euro5050">0</span>
+        <button onclick="changeQty('euro5050', 1)">+</button>
+    </div>
+
+
+    <h2>Additional Euro Cylinders</h2>
+
+    <div id="euro-cylinders-extras"></div>
+
+    <button class="menu-button" onclick="addExtra('euro-cylinders')">
+        ＋ Add Extra Euro Cylinder
+    </button>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

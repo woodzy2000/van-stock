@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock to Order</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Stock to Order</h1>
+    <p>Low Stock Items</p>
+</div>
+
+<div class="container">
+
+    <button class="menu-button" onclick="window.location='index.html'">
+        ← Back
+    </button>
+
+    <div id="order-list"></div>
+
+    <div id="no-stock" style="display:none; text-align:center; padding:30px;">
+        <h2>All Stock OK 👍</h2>
+        <p>Nothing currently needs ordering.</p>
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+<script>
+
+function addOrderItem(group, name, value) {
+    const orderList = document.getElementById("order-list");
+    const item = document.createElement("div");
+
+    item.className = "stock-item low-stock";
+    item.innerHTML = `
+        <span>
+            <strong>${group}</strong><br>
+            ${name}
+        </span>
+
+        <span class="qty">${value}</span>
+    `;
+
+    orderList.appendChild(item);
+}
+
+function getStockGroup(id) {
+    if (id.startsWith("hinge17_")) return "17mm Friction Stay";
+    if (id.startsWith("hinge")) return "13mm Friction Stay";
+    if (id.startsWith("fire")) return "Fire Egress Hinges";
+
+    if (id.startsWith("handle_white")) return "Window Handles - White";
+    if (id.startsWith("handle_chrome")) return "Window Handles - Chrome";
+    if (id.startsWith("handle_gold")) return "Window Handles - Gold";
+
+    if (id.startsWith("lock20_")) return "Window Locks - 20mm Backset";
+    if (id.startsWith("lock22_")) return "Window Locks - 22mm Backset";
+
+    if (id.startsWith("euro")) return "Euro Cylinders";
+    if (id.startsWith("door")) return "Door Handles - White Lever / Lever";
+
+    return "Stock";
+}
+
+function getExtraGroup(key) {
+    if (key === "window-locks_extras") return "Additional Window Locks";
+    if (key === "euro-cylinders_extras") return "Additional Euro Cylinders";
+    if (key === "door-handles_extras") return "Additional Door Handles";
+
+    return "Additional Stock";
+}
+
+function showStockToOrder() {
+    const orderList = document.getElementById("order-list");
+    const noStock = document.getElementById("no-stock");
+
+    orderList.innerHTML = "";
+
+    let found = false;
+    const seen = new Set();
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+
+        if (!key || !key.startsWith("stock_") || key.startsWith("stock_name_")) {
+            continue;
+        }
+
+        const id = key.substring(6);
+        const value = parseInt(localStorage.getItem(key), 10);
+        const name = localStorage.getItem("stock_name_" + id);
+
+        if (!name || Number.isNaN(value)) {
+            continue;
+        }
+
+        if (value <= 1) {
+            const group = getStockGroup(id);
+            const itemKey = `${group}|${name}`;
+
+            if (!seen.has(itemKey)) {
+                seen.add(itemKey);
+                addOrderItem(group, name, value);
+                found = true;
+            }
+        }
+    }
+
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+
+        if (!key || !key.endsWith("_extras")) {
+            continue;
+        }
+
+        let extras = [];
+
+        try {
+            extras = JSON.parse(localStorage.getItem(key)) || [];
+        }
+        catch (error) {
+            continue;
+        }
+
+        extras.forEach(function(extra) {
+            if (!extra || extra.quantity == null) {
+                return;
+            }
+
+            const quantity = parseInt(extra.quantity, 10);
+
+            if (quantity <= 1) {
+                const group = getExtraGroup(key);
+                const itemKey = `${group}|${extra.description}`;
+
+                if (!seen.has(itemKey)) {
+                    seen.add(itemKey);
+                    addOrderItem(group, extra.description, quantity);
+                    found = true;
+                }
+            }
+        });
+    }
+
+    noStock.style.display = found ? "none" : "block";
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    showStockToOrder();
+});
+
+</script>
+
+</body>
+</html>
