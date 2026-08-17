@@ -17,15 +17,12 @@
 
 <div class="container">
 
-    <!-- BACK -->
     <button class="menu-button" onclick="window.location='index.html'">
         ← Back
     </button>
 
 
-    <!-- ========================= -->
     <!-- 13mm HINGES -->
-    <!-- ========================= -->
 
     <h2>13mm Friction Stay</h2>
 
@@ -72,9 +69,7 @@
     </div>
 
 
-    <!-- ========================= -->
     <!-- 17mm HINGES -->
-    <!-- ========================= -->
 
     <h2>17mm Friction Stay</h2>
 
@@ -121,9 +116,7 @@
     </div>
 
 
-    <!-- ========================= -->
     <!-- FIRE EGRESS -->
-    <!-- ========================= -->
 
     <h2>Fire Egress Hinges</h2>
 
@@ -142,9 +135,7 @@
     </div>
 
 
-    <!-- ========================= -->
     <!-- ADDITIONAL HINGES -->
-    <!-- ========================= -->
 
     <h2>Additional Hinges</h2>
 
@@ -158,19 +149,13 @@
     </button>
 
 
-    <!-- ========================= -->
     <!-- ADD HINGE FORM -->
-    <!-- ========================= -->
 
-    <div
-        id="hinge-form"
-        style="display:none; margin-top:20px;">
+    <div id="hinge-form" style="display:none; margin-top:20px;">
 
         <h3>Add Extra Hinge</h3>
 
-        <label>
-            Product name
-        </label>
+        <label>Product name</label>
 
         <input
             type="text"
@@ -179,9 +164,7 @@
             style="width:100%; box-sizing:border-box; padding:12px; margin-top:5px;"
         >
 
-
-        <label
-            style="display:block; margin-top:15px;">
+        <label style="display:block; margin-top:15px;">
             Quantity
         </label>
 
@@ -194,17 +177,51 @@
         >
 
 
-        <label
-            style="display:block; margin-top:15px;">
+        <!-- CAMERA -->
+
+        <label style="display:block; margin-top:15px;">
             Photo
         </label>
 
         <input
             type="file"
-            id="hinge-photo"
+            id="hinge-camera"
             accept="image/*"
-            style="width:100%; margin-top:5px;"
+            capture="environment"
+            style="display:none;"
         >
+
+        <button
+            class="menu-button"
+            type="button"
+            onclick="document.getElementById('hinge-camera').click()">
+            📷 Take Photo
+        </button>
+
+
+        <!-- PHOTO LIBRARY -->
+
+        <input
+            type="file"
+            id="hinge-library"
+            accept="image/*"
+            style="display:none;"
+        >
+
+        <button
+            class="menu-button"
+            type="button"
+            onclick="document.getElementById('hinge-library').click()">
+            🖼️ Choose Photo
+        </button>
+
+
+        <!-- PHOTO PREVIEW -->
+
+        <div
+            id="hinge-photo-preview"
+            style="margin-top:15px; text-align:center;">
+        </div>
 
 
         <button
@@ -214,7 +231,6 @@
             style="margin-top:20px;">
             Save Hinge
         </button>
-
 
         <button
             class="menu-button"
@@ -228,10 +244,62 @@
 </div>
 
 
+<!-- LARGE PHOTO VIEW -->
+
+<div
+    id="hinge-photo-modal"
+    onclick="closeHingePhoto()"
+    style="
+        display:none;
+        position:fixed;
+        z-index:9999;
+        left:0;
+        top:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.95);
+        align-items:center;
+        justify-content:center;
+    "
+>
+
+    <img
+        id="hinge-large-photo"
+        src=""
+        alt="Hinge photo"
+        style="
+            max-width:95%;
+            max-height:90%;
+            object-fit:contain;
+            border-radius:10px;
+        "
+    >
+
+    <button
+        type="button"
+        onclick="closeHingePhoto(event)"
+        style="
+            position:absolute;
+            top:20px;
+            right:20px;
+            font-size:30px;
+            background:none;
+            border:none;
+            color:white;
+        ">
+        ×
+    </button>
+
+</div>
+
+
 <script src="app.js"></script>
 
 
 <script>
+
+let selectedHingePhoto = "";
+
 
 function openHingeForm() {
 
@@ -248,8 +316,93 @@ function closeHingeForm() {
         "hinge-form"
     ).style.display = "none";
 
+    selectedHingePhoto = "";
+
+    document.getElementById(
+        "hinge-photo-preview"
+    ).innerHTML = "";
+
+    document.getElementById(
+        "hinge-camera"
+    ).value = "";
+
+    document.getElementById(
+        "hinge-library"
+    ).value = "";
 }
 
+
+/* =========================
+   HANDLE CAMERA
+========================= */
+
+document.getElementById(
+    "hinge-camera"
+).addEventListener(
+    "change",
+    handleHingePhoto
+);
+
+
+/* =========================
+   HANDLE PHOTO LIBRARY
+========================= */
+
+document.getElementById(
+    "hinge-library"
+).addEventListener(
+    "change",
+    handleHingePhoto
+);
+
+
+/* =========================
+   READ PHOTO
+========================= */
+
+function handleHingePhoto(event) {
+
+    const file =
+        event.target.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    const reader =
+        new FileReader();
+
+    reader.onload = function(e) {
+
+        selectedHingePhoto =
+            e.target.result;
+
+        document.getElementById(
+            "hinge-photo-preview"
+        ).innerHTML = `
+            <img
+                src="${selectedHingePhoto}"
+                onclick="showHingePhoto('${selectedHingePhoto}')"
+                style="
+                    width:100px;
+                    height:100px;
+                    object-fit:cover;
+                    border-radius:10px;
+                    cursor:pointer;
+                "
+            >
+            <p>Tap photo to view large</p>
+        `;
+
+    };
+
+    reader.readAsDataURL(file);
+}
+
+
+/* =========================
+   SAVE HINGE
+========================= */
 
 function saveExtraHinge() {
 
@@ -258,7 +411,6 @@ function saveExtraHinge() {
             "hinge-description"
         ).value.trim();
 
-
     const quantity =
         parseInt(
             document.getElementById(
@@ -266,12 +418,6 @@ function saveExtraHinge() {
             ).value,
             10
         ) || 0;
-
-
-    const photoInput =
-        document.getElementById(
-            "hinge-photo"
-        );
 
 
     if (!description) {
@@ -284,60 +430,59 @@ function saveExtraHinge() {
     }
 
 
-    /*
-       PHOTO IS OPTIONAL
-
-       You can save a hinge with
-       or without a photograph.
-    */
-
-    if (
-        photoInput.files &&
-        photoInput.files.length > 0
-    ) {
-
-        const file =
-            photoInput.files[0];
+    saveHingeWithPhoto(
+        description,
+        quantity,
+        selectedHingePhoto
+    );
 
 
-        const reader =
-            new FileReader();
+    document.getElementById(
+        "hinge-description"
+    ).value = "";
+
+    document.getElementById(
+        "hinge-quantity"
+    ).value = "1";
 
 
-        reader.onload = function(event) {
-
-            saveHingeWithPhoto(
-                description,
-                quantity,
-                event.target.result
-            );
-
-        };
+    closeHingeForm();
+}
 
 
-        reader.onerror = function() {
+/* =========================
+   SHOW LARGE PHOTO
+========================= */
 
-            alert(
-                "The photo could not be loaded."
-            );
+function showHingePhoto(photo) {
 
-        };
+    document.getElementById(
+        "hinge-large-photo"
+    ).src = photo;
+
+    document.getElementById(
+        "hinge-photo-modal"
+    ).style.display = "flex";
+}
 
 
-        reader.readAsDataURL(file);
+/* =========================
+   CLOSE LARGE PHOTO
+========================= */
 
+function closeHingePhoto(event) {
+
+    if (event) {
+        event.stopPropagation();
     }
 
-    else {
+    document.getElementById(
+        "hinge-photo-modal"
+    ).style.display = "none";
 
-        saveHingeWithPhoto(
-            description,
-            quantity,
-            ""
-        );
-
-    }
-
+    document.getElementById(
+        "hinge-large-photo"
+    ).src = "";
 }
 
 </script>

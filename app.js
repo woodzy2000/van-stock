@@ -6,21 +6,15 @@ function changeQty(id, amount) {
 
     const qty = document.getElementById(id);
 
-    if (!qty) {
-        return;
-    }
+    if (!qty) return;
 
     let value = parseInt(qty.innerText);
 
-    if (isNaN(value)) {
-        value = 0;
-    }
+    if (isNaN(value)) value = 0;
 
     value += amount;
 
-    if (value < 0) {
-        value = 0;
-    }
+    if (value < 0) value = 0;
 
     qty.innerText = value;
 
@@ -50,9 +44,7 @@ function changeQty(id, amount) {
 
 function updateLowStock(stockItem, value) {
 
-    if (!stockItem) {
-        return;
-    }
+    if (!stockItem) return;
 
     if (value <= 1) {
         stockItem.classList.add("low-stock");
@@ -68,27 +60,27 @@ function updateLowStock(stockItem, value) {
 
 function loadStock() {
 
-    const quantities = document.querySelectorAll(
-        ".stock-item .qty"
-    );
+    const quantities =
+        document.querySelectorAll(".stock-item .qty");
 
     quantities.forEach(function(qty) {
 
         const id = qty.id;
 
-        if (!id) {
-            return;
-        }
+        if (!id) return;
 
-        const stockItem = qty.closest(".stock-item");
+        const stockItem =
+            qty.closest(".stock-item");
 
         if (stockItem) {
 
-            const name = stockItem.querySelector(
-                "span:first-child"
-            );
+            const name =
+                stockItem.querySelector(
+                    "span:first-child"
+                );
 
             if (name) {
+
                 localStorage.setItem(
                     "stock_name_" + id,
                     name.innerText.trim()
@@ -96,47 +88,52 @@ function loadStock() {
             }
         }
 
-        const saved = localStorage.getItem(
-            "stock_" + id
-        );
+        const saved =
+            localStorage.getItem(
+                "stock_" + id
+            );
 
         if (saved !== null) {
             qty.innerText = saved;
         }
 
-        const value = parseInt(qty.innerText) || 0;
+        const value =
+            parseInt(qty.innerText) || 0;
 
-        updateLowStock(stockItem, value);
+        updateLowStock(
+            stockItem,
+            value
+        );
     });
 }
 
 
 // ================================
-// NORMAL EXTRA STOCK
+// EXTRA STOCK
 // ================================
 
 function addExtra(type) {
 
-    const description = prompt(
-        "Enter item description:"
-    );
+    const description =
+        prompt("Enter item description:");
 
-    if (!description || description.trim() === "") {
+    if (!description ||
+        description.trim() === "") {
         return;
     }
 
-    let quantity = prompt(
-        "Enter quantity:",
-        "1"
-    );
+    let quantity =
+        prompt("Enter quantity:", "1");
 
     quantity = parseInt(quantity);
 
-    if (isNaN(quantity) || quantity < 0) {
+    if (isNaN(quantity) ||
+        quantity < 0) {
         quantity = 0;
     }
 
-    const id = type + "_" + Date.now();
+    const id =
+        type + "_" + Date.now();
 
     const extra = {
         id: id,
@@ -144,9 +141,12 @@ function addExtra(type) {
         quantity: quantity
     };
 
-    let extras = JSON.parse(
-        localStorage.getItem(type + "_extras")
-    ) || [];
+    let extras =
+        JSON.parse(
+            localStorage.getItem(
+                type + "_extras"
+            )
+        ) || [];
 
     extras.push(extra);
 
@@ -165,38 +165,43 @@ function addExtra(type) {
 
 function displayExtras(type) {
 
-    const area = document.getElementById(
-        type + "-extras"
-    );
+    const area =
+        document.getElementById(
+            type + "-extras"
+        );
 
-    if (!area) {
-        return;
-    }
+    if (!area) return;
 
     area.innerHTML = "";
 
-    let extras = JSON.parse(
-        localStorage.getItem(type + "_extras")
-    ) || [];
+    let extras =
+        JSON.parse(
+            localStorage.getItem(
+                type + "_extras"
+            )
+        ) || [];
 
     extras.forEach(function(extra) {
 
-        const item = document.createElement("div");
+        const item =
+            document.createElement("div");
 
-        item.className = "stock-item";
+        item.className =
+            "stock-item";
 
-        // PRODUCT NAME
-        const name = document.createElement("span");
-        name.innerText = extra.description;
 
         // PHOTO
+
         if (extra.photo) {
 
-            const photo = document.createElement("img");
+            const photo =
+                document.createElement("img");
 
-            photo.src = extra.photo;
+            photo.src =
+                extra.photo;
 
-            photo.alt = extra.description;
+            photo.alt =
+                extra.description;
 
             photo.style.width = "80px";
             photo.style.height = "80px";
@@ -205,78 +210,128 @@ function displayExtras(type) {
             photo.style.marginRight = "10px";
             photo.style.cursor = "pointer";
 
-            // Tap photo to view larger
+
             photo.onclick = function() {
-                window.open(extra.photo, "_blank");
+
+                if (
+                    typeof showHingePhoto ===
+                    "function"
+                ) {
+
+                    showHingePhoto(
+                        extra.photo
+                    );
+
+                }
+
             };
+
 
             item.appendChild(photo);
         }
 
+
+        // NAME
+
+        const name =
+            document.createElement("span");
+
+        name.innerText =
+            extra.description;
+
         item.appendChild(name);
 
+
         // MINUS
-        const minus = document.createElement("button");
+
+        const minus =
+            document.createElement("button");
 
         minus.innerText = "-";
 
         minus.onclick = function() {
+
             changeExtraQty(
                 type,
                 extra.id,
                 -1
             );
+
         };
 
+        item.appendChild(minus);
+
+
         // QUANTITY
-        const quantity = document.createElement("span");
+
+        const quantity =
+            document.createElement("span");
 
         quantity.className = "qty";
 
-        quantity.id = extra.id;
+        quantity.id =
+            extra.id;
 
-        quantity.innerText = extra.quantity;
+        quantity.innerText =
+            extra.quantity;
+
+        item.appendChild(quantity);
+
 
         // PLUS
-        const plus = document.createElement("button");
+
+        const plus =
+            document.createElement("button");
 
         plus.innerText = "+";
 
         plus.onclick = function() {
+
             changeExtraQty(
                 type,
                 extra.id,
                 1
             );
+
         };
 
+        item.appendChild(plus);
+
+
         // DELETE
+
         const deleteButton =
             document.createElement("button");
 
         deleteButton.className =
             "delete-extra";
 
-        deleteButton.innerText = "×";
+        deleteButton.innerText =
+            "×";
 
-        deleteButton.onclick = function() {
-            deleteExtra(
-                type,
-                extra.id
-            );
-        };
+        deleteButton.onclick =
+            function() {
 
-        item.appendChild(minus);
-        item.appendChild(quantity);
-        item.appendChild(plus);
-        item.appendChild(deleteButton);
+                deleteExtra(
+                    type,
+                    extra.id
+                );
+
+            };
+
+        item.appendChild(
+            deleteButton
+        );
+
 
         area.appendChild(item);
+
 
         updateLowStock(
             item,
             extra.quantity
         );
+
     });
 }
 
@@ -285,19 +340,27 @@ function displayExtras(type) {
 // CHANGE EXTRA QUANTITY
 // ================================
 
-function changeExtraQty(type, id, amount) {
+function changeExtraQty(
+    type,
+    id,
+    amount
+) {
 
-    let extras = JSON.parse(
-        localStorage.getItem(type + "_extras")
-    ) || [];
+    let extras =
+        JSON.parse(
+            localStorage.getItem(
+                type + "_extras"
+            )
+        ) || [];
 
-    const extra = extras.find(function(item) {
-        return item.id === id;
-    });
+    const extra =
+        extras.find(
+            function(item) {
+                return item.id === id;
+            }
+        );
 
-    if (!extra) {
-        return;
-    }
+    if (!extra) return;
 
     extra.quantity += amount;
 
@@ -318,19 +381,32 @@ function changeExtraQty(type, id, amount) {
 // DELETE EXTRA
 // ================================
 
-function deleteExtra(type, id) {
+function deleteExtra(
+    type,
+    id
+) {
 
-    if (!confirm("Remove this extra item?")) {
+    if (
+        !confirm(
+            "Remove this extra item?"
+        )
+    ) {
         return;
     }
 
-    let extras = JSON.parse(
-        localStorage.getItem(type + "_extras")
-    ) || [];
+    let extras =
+        JSON.parse(
+            localStorage.getItem(
+                type + "_extras"
+            )
+        ) || [];
 
-    extras = extras.filter(function(item) {
-        return item.id !== id;
-    });
+    extras =
+        extras.filter(
+            function(item) {
+                return item.id !== id;
+            }
+        );
 
     localStorage.setItem(
         type + "_extras",
@@ -351,9 +427,10 @@ function saveHingeWithPhoto(
     photo
 ) {
 
-    const id = "hinges_" + Date.now();
+    const id =
+        "hinges_" + Date.now();
 
-    // If there is a photo, compress it first.
+
     if (photo) {
 
         compressHingePhoto(
@@ -378,12 +455,13 @@ function saveHingeWithPhoto(
             quantity,
             ""
         );
+
     }
 }
 
 
 // ================================
-// SAVE HINGE ITEM
+// SAVE HINGE
 // ================================
 
 function saveHingeItem(
@@ -394,17 +472,31 @@ function saveHingeItem(
 ) {
 
     const extra = {
+
         id: id,
-        description: description.trim(),
-        quantity: quantity,
-        photo: photo
+
+        description:
+            description.trim(),
+
+        quantity:
+            quantity,
+
+        photo:
+            photo
+
     };
 
-    let extras = JSON.parse(
-        localStorage.getItem("hinges_extras")
-    ) || [];
+
+    let extras =
+        JSON.parse(
+            localStorage.getItem(
+                "hinges_extras"
+            )
+        ) || [];
+
 
     extras.push(extra);
+
 
     try {
 
@@ -422,12 +514,15 @@ function saveHingeItem(
         return;
     }
 
-    displayExtras("hinges");
+
+    displayExtras(
+        "hinges"
+    );
 }
 
 
 // ================================
-// COMPRESS HINGE PHOTO
+// COMPRESS PHOTO
 // ================================
 
 function compressHingePhoto(
@@ -435,66 +530,101 @@ function compressHingePhoto(
     callback
 ) {
 
-    const image = new Image();
+    const image =
+        new Image();
 
-    image.onload = function() {
 
-        const maxSize = 1000;
+    image.onload =
+        function() {
 
-        let width = image.width;
-        let height = image.height;
+            const maxSize =
+                1000;
 
-        if (width > height) {
+            let width =
+                image.width;
 
-            if (width > maxSize) {
-                height =
-                    height * (maxSize / width);
+            let height =
+                image.height;
 
-                width = maxSize;
+
+            if (width > height) {
+
+                if (width > maxSize) {
+
+                    height =
+                        height *
+                        (maxSize / width);
+
+                    width =
+                        maxSize;
+                }
+
+            } else {
+
+                if (height > maxSize) {
+
+                    width =
+                        width *
+                        (maxSize / height);
+
+                    height =
+                        maxSize;
+                }
             }
 
-        } else {
 
-            if (height > maxSize) {
-                width =
-                    width * (maxSize / height);
+            const canvas =
+                document.createElement(
+                    "canvas"
+                );
 
-                height = maxSize;
-            }
-        }
 
-        const canvas =
-            document.createElement("canvas");
+            canvas.width =
+                width;
 
-        canvas.width = width;
-        canvas.height = height;
+            canvas.height =
+                height;
 
-        const context =
-            canvas.getContext("2d");
 
-        context.drawImage(
-            image,
-            0,
-            0,
-            width,
-            height
-        );
+            const context =
+                canvas.getContext(
+                    "2d"
+                );
 
-        const compressed =
-            canvas.toDataURL(
-                "image/jpeg",
-                0.70
+
+            context.drawImage(
+                image,
+                0,
+                0,
+                width,
+                height
             );
 
-        callback(compressed);
-    };
 
-    image.onerror = function() {
+            const compressed =
+                canvas.toDataURL(
+                    "image/jpeg",
+                    0.70
+                );
 
-        callback("");
-    };
 
-    image.src = dataUrl;
+            callback(
+                compressed
+            );
+
+        };
+
+
+    image.onerror =
+        function() {
+
+            callback("");
+
+        };
+
+
+    image.src =
+        dataUrl;
 }
 
 
@@ -513,16 +643,19 @@ document.addEventListener(
                 "[id$='-extras']"
             );
 
-        extraAreas.forEach(function(area) {
+        extraAreas.forEach(
+            function(area) {
 
-            const type =
-                area.id.replace(
-                    "-extras",
-                    ""
-                );
+                const type =
+                    area.id.replace(
+                        "-extras",
+                        ""
+                    );
 
-            displayExtras(type);
-        });
+                displayExtras(type);
+
+            }
+        );
 
     }
 );
