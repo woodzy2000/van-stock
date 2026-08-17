@@ -109,7 +109,7 @@ function loadStock() {
 
 
 // ================================
-// EXTRA STOCK
+// OLD EXTRA STOCK
 // ================================
 
 function addExtra(type) {
@@ -190,7 +190,9 @@ function displayExtras(type) {
             "stock-item";
 
 
+        // =========================
         // PHOTO
+        // =========================
 
         if (extra.photo) {
 
@@ -213,15 +215,32 @@ function displayExtras(type) {
 
             photo.onclick = function() {
 
+                // HINGES
                 if (
-                    typeof showHingePhoto ===
-                    "function"
+                    type === "hinges" &&
+                    typeof showHingePhoto === "function"
                 ) {
 
                     showHingePhoto(
                         extra.photo
                     );
 
+                    return;
+                }
+
+
+                // WINDOW HANDLES
+                if (
+                    type === "handles" &&
+                    typeof showHandlePhoto === "function"
+                ) {
+
+                    selectedHandlePhoto =
+                        extra.photo;
+
+                    showHandlePhoto();
+
+                    return;
                 }
 
             };
@@ -231,7 +250,9 @@ function displayExtras(type) {
         }
 
 
+        // =========================
         // NAME
+        // =========================
 
         const name =
             document.createElement("span");
@@ -242,7 +263,9 @@ function displayExtras(type) {
         item.appendChild(name);
 
 
+        // =========================
         // MINUS
+        // =========================
 
         const minus =
             document.createElement("button");
@@ -262,7 +285,9 @@ function displayExtras(type) {
         item.appendChild(minus);
 
 
+        // =========================
         // QUANTITY
+        // =========================
 
         const quantity =
             document.createElement("span");
@@ -278,7 +303,9 @@ function displayExtras(type) {
         item.appendChild(quantity);
 
 
+        // =========================
         // PLUS
+        // =========================
 
         const plus =
             document.createElement("button");
@@ -298,7 +325,9 @@ function displayExtras(type) {
         item.appendChild(plus);
 
 
+        // =========================
         // DELETE
+        // =========================
 
         const deleteButton =
             document.createElement("button");
@@ -522,7 +551,7 @@ function saveHingeItem(
 
 
 // ================================
-// COMPRESS PHOTO
+// COMPRESS HINGE PHOTO
 // ================================
 
 function compressHingePhoto(
