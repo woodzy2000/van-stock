@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hinges</title>
+    <title>Hinges - UPVC Repair Van Stock</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,16 +12,21 @@
 
 <div class="header">
     <h1>Hinges</h1>
-    <p>Van Stock</p>
+    <p>UPVC Repair - Van Stock</p>
 </div>
 
 <div class="container">
 
+    <!-- BACK -->
     <button class="menu-button" onclick="window.location='index.html'">
         ← Back
     </button>
 
+
+    <!-- ========================= -->
     <!-- 13mm HINGES -->
+    <!-- ========================= -->
+
     <h2>13mm Friction Stay</h2>
 
     <div class="stock-item">
@@ -67,7 +72,10 @@
     </div>
 
 
+    <!-- ========================= -->
     <!-- 17mm HINGES -->
+    <!-- ========================= -->
+
     <h2>17mm Friction Stay</h2>
 
     <div class="stock-item">
@@ -113,7 +121,10 @@
     </div>
 
 
-    <!-- FIRE EGRESS HINGES -->
+    <!-- ========================= -->
+    <!-- FIRE EGRESS -->
+    <!-- ========================= -->
+
     <h2>Fire Egress Hinges</h2>
 
     <div class="stock-item">
@@ -130,17 +141,206 @@
         <button onclick="changeQty('fire16', 1)">+</button>
     </div>
 
-<h2>Additional Hinges</h2>
 
-<div id="hinges-extras"></div>
+    <!-- ========================= -->
+    <!-- ADDITIONAL HINGES -->
+    <!-- ========================= -->
 
-<button class="menu-button" onclick="addExtra('hinges')">
-    ＋ Add Extra Hinge
-</button>
+    <h2>Additional Hinges</h2>
+
+    <div id="hinges-extras"></div>
+
+    <button
+        class="menu-button"
+        type="button"
+        onclick="openHingeForm()">
+        ＋ Add Extra Hinge
+    </button>
+
+
+    <!-- ========================= -->
+    <!-- ADD HINGE FORM -->
+    <!-- ========================= -->
+
+    <div
+        id="hinge-form"
+        style="display:none; margin-top:20px;">
+
+        <h3>Add Extra Hinge</h3>
+
+        <label>
+            Product name
+        </label>
+
+        <input
+            type="text"
+            id="hinge-description"
+            placeholder="Enter hinge name"
+            style="width:100%; box-sizing:border-box; padding:12px; margin-top:5px;"
+        >
+
+
+        <label
+            style="display:block; margin-top:15px;">
+            Quantity
+        </label>
+
+        <input
+            type="number"
+            id="hinge-quantity"
+            value="1"
+            min="0"
+            style="width:100%; box-sizing:border-box; padding:12px; margin-top:5px;"
+        >
+
+
+        <label
+            style="display:block; margin-top:15px;">
+            Photo
+        </label>
+
+        <input
+            type="file"
+            id="hinge-photo"
+            accept="image/*"
+            style="width:100%; margin-top:5px;"
+        >
+
+
+        <button
+            class="menu-button"
+            type="button"
+            onclick="saveExtraHinge()"
+            style="margin-top:20px;">
+            Save Hinge
+        </button>
+
+
+        <button
+            class="menu-button"
+            type="button"
+            onclick="closeHingeForm()">
+            Cancel
+        </button>
+
+    </div>
 
 </div>
 
+
 <script src="app.js"></script>
+
+
+<script>
+
+function openHingeForm() {
+
+    document.getElementById(
+        "hinge-form"
+    ).style.display = "block";
+
+}
+
+
+function closeHingeForm() {
+
+    document.getElementById(
+        "hinge-form"
+    ).style.display = "none";
+
+}
+
+
+function saveExtraHinge() {
+
+    const description =
+        document.getElementById(
+            "hinge-description"
+        ).value.trim();
+
+
+    const quantity =
+        parseInt(
+            document.getElementById(
+                "hinge-quantity"
+            ).value,
+            10
+        ) || 0;
+
+
+    const photoInput =
+        document.getElementById(
+            "hinge-photo"
+        );
+
+
+    if (!description) {
+
+        alert(
+            "Please enter a product name."
+        );
+
+        return;
+    }
+
+
+    /*
+       PHOTO IS OPTIONAL
+
+       You can save a hinge with
+       or without a photograph.
+    */
+
+    if (
+        photoInput.files &&
+        photoInput.files.length > 0
+    ) {
+
+        const file =
+            photoInput.files[0];
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload = function(event) {
+
+            saveHingeWithPhoto(
+                description,
+                quantity,
+                event.target.result
+            );
+
+        };
+
+
+        reader.onerror = function() {
+
+            alert(
+                "The photo could not be loaded."
+            );
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+    }
+
+    else {
+
+        saveHingeWithPhoto(
+            description,
+            quantity,
+            ""
+        );
+
+    }
+
+}
+
+</script>
 
 </body>
 </html>
