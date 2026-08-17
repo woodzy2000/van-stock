@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Window Handles</title>
+    <title>Window Handles - UPVC Repair Van Stock</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,7 +12,7 @@
 
 <div class="header">
     <h1>Window Handles</h1>
-    <p>Van Stock</p>
+    <p>UPVC Repair - Van Stock</p>
 </div>
 
 <div class="container">
@@ -20,6 +20,11 @@
     <button class="menu-button" onclick="window.location='index.html'">
         ← Back
     </button>
+
+
+    <!-- ========================= -->
+    <!-- WHITE -->
+    <!-- ========================= -->
 
     <h2>White</h2>
 
@@ -44,6 +49,11 @@
         <button onclick="changeQty('handle_white_right', 1)">+</button>
     </div>
 
+
+    <!-- ========================= -->
+    <!-- CHROME -->
+    <!-- ========================= -->
+
     <h2>Chrome</h2>
 
     <div class="stock-item">
@@ -66,6 +76,11 @@
         <span class="qty" id="handle_chrome_right">0</span>
         <button onclick="changeQty('handle_chrome_right', 1)">+</button>
     </div>
+
+
+    <!-- ========================= -->
+    <!-- GOLD -->
+    <!-- ========================= -->
 
     <h2>Gold</h2>
 
@@ -90,17 +105,427 @@
         <button onclick="changeQty('handle_gold_right', 1)">+</button>
     </div>
 
+
+    <!-- ========================= -->
+    <!-- ADDITIONAL WINDOW HANDLES -->
+    <!-- ========================= -->
+
     <h2>Additional Window Handles</h2>
 
-<div id="handles-extras"></div>
+    <div id="handles-extras"></div>
 
-<button class="menu-button" onclick="addExtra('handles')">
-    ＋ Add Extra Handle
-</button>
+    <button
+        class="menu-button"
+        type="button"
+        onclick="openHandleForm()">
+        ＋ Add Extra Handle
+    </button>
+
+
+    <!-- ========================= -->
+    <!-- ADD HANDLE FORM -->
+    <!-- ========================= -->
+
+    <div
+        id="handle-form"
+        style="display:none; margin-top:20px;">
+
+        <h3>Add Extra Window Handle</h3>
+
+        <label>
+            Product name
+        </label>
+
+        <input
+            type="text"
+            id="handle-description"
+            placeholder="Enter handle name"
+            style="width:100%; box-sizing:border-box; padding:12px; margin-top:5px;"
+        >
+
+
+        <label
+            style="display:block; margin-top:15px;">
+            Quantity
+        </label>
+
+        <input
+            type="number"
+            id="handle-quantity"
+            value="1"
+            min="0"
+            style="width:100%; box-sizing:border-box; padding:12px; margin-top:5px;"
+        >
+
+
+        <!-- CAMERA -->
+
+        <label
+            style="display:block; margin-top:15px;">
+            Photo
+        </label>
+
+        <input
+            type="file"
+            id="handle-camera"
+            accept="image/*"
+            capture="environment"
+            style="display:none;"
+        >
+
+        <button
+            class="menu-button"
+            type="button"
+            onclick="document.getElementById('handle-camera').click()">
+            📷 Take Photo
+        </button>
+
+
+        <!-- PHOTO LIBRARY -->
+
+        <input
+            type="file"
+            id="handle-library"
+            accept="image/*"
+            style="display:none;"
+        >
+
+        <button
+            class="menu-button"
+            type="button"
+            onclick="document.getElementById('handle-library').click()">
+            🖼️ Choose Photo
+        </button>
+
+
+        <!-- PHOTO PREVIEW -->
+
+        <div
+            id="handle-photo-preview"
+            style="margin-top:15px; text-align:center;">
+        </div>
+
+
+        <button
+            class="menu-button"
+            type="button"
+            onclick="saveExtraHandle()"
+            style="margin-top:20px;">
+            Save Handle
+        </button>
+
+        <button
+            class="menu-button"
+            type="button"
+            onclick="closeHandleForm()">
+            Cancel
+        </button>
+
+    </div>
 
 </div>
 
+
+<!-- ========================= -->
+<!-- LARGE PHOTO VIEW -->
+<!-- ========================= -->
+
+<div
+    id="handle-photo-modal"
+    onclick="closeHandlePhoto()"
+    style="
+        display:none;
+        position:fixed;
+        z-index:9999;
+        left:0;
+        top:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.95);
+        align-items:center;
+        justify-content:center;
+    "
+>
+
+    <img
+        id="handle-large-photo"
+        src=""
+        alt="Window handle photo"
+        style="
+            max-width:95%;
+            max-height:90%;
+            object-fit:contain;
+            border-radius:10px;
+        "
+    >
+
+    <button
+        type="button"
+        onclick="closeHandlePhoto(event)"
+        style="
+            position:absolute;
+            top:20px;
+            right:20px;
+            font-size:30px;
+            background:none;
+            border:none;
+            color:white;
+        ">
+        ×
+    </button>
+
+</div>
+
+
 <script src="app.js"></script>
+
+
+<script>
+
+let selectedHandlePhoto = "";
+
+
+/* =========================
+   OPEN FORM
+========================= */
+
+function openHandleForm() {
+
+    document.getElementById(
+        "handle-form"
+    ).style.display = "block";
+
+}
+
+
+/* =========================
+   CLOSE FORM
+========================= */
+
+function closeHandleForm() {
+
+    document.getElementById(
+        "handle-form"
+    ).style.display = "none";
+
+    selectedHandlePhoto = "";
+
+    document.getElementById(
+        "handle-photo-preview"
+    ).innerHTML = "";
+
+    document.getElementById(
+        "handle-camera"
+    ).value = "";
+
+    document.getElementById(
+        "handle-library"
+    ).value = "";
+}
+
+
+/* =========================
+   CAMERA
+========================= */
+
+document.getElementById(
+    "handle-camera"
+).addEventListener(
+    "change",
+    handleWindowHandlePhoto
+);
+
+
+/* =========================
+   PHOTO LIBRARY
+========================= */
+
+document.getElementById(
+    "handle-library"
+).addEventListener(
+    "change",
+    handleWindowHandlePhoto
+);
+
+
+/* =========================
+   READ PHOTO
+========================= */
+
+function handleWindowHandlePhoto(event) {
+
+    const file =
+        event.target.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    const reader =
+        new FileReader();
+
+    reader.onload = function(e) {
+
+        selectedHandlePhoto =
+            e.target.result;
+
+        document.getElementById(
+            "handle-photo-preview"
+        ).innerHTML = `
+            <img
+                src="${selectedHandlePhoto}"
+                onclick="showHandlePhoto()"
+                style="
+                    width:100px;
+                    height:100px;
+                    object-fit:cover;
+                    border-radius:10px;
+                    cursor:pointer;
+                "
+            >
+            <p>Tap photo to view large</p>
+        `;
+
+    };
+
+    reader.readAsDataURL(file);
+}
+
+
+/* =========================
+   SAVE HANDLE
+========================= */
+
+function saveExtraHandle() {
+
+    const description =
+        document.getElementById(
+            "handle-description"
+        ).value.trim();
+
+    const quantity =
+        parseInt(
+            document.getElementById(
+                "handle-quantity"
+            ).value,
+            10
+        ) || 0;
+
+
+    if (!description) {
+
+        alert(
+            "Please enter a product name."
+        );
+
+        return;
+    }
+
+
+    const id =
+        "handles_" + Date.now();
+
+
+    let extras =
+        JSON.parse(
+            localStorage.getItem(
+                "handles_extras"
+            )
+        ) || [];
+
+
+    const extra = {
+
+        id: id,
+
+        description:
+            description,
+
+        quantity:
+            quantity,
+
+        photo:
+            selectedHandlePhoto
+
+    };
+
+
+    extras.push(extra);
+
+
+    try {
+
+        localStorage.setItem(
+            "handles_extras",
+            JSON.stringify(extras)
+        );
+
+    } catch (error) {
+
+        alert(
+            "The photo is too large to save. Please try another photo."
+        );
+
+        return;
+    }
+
+
+    document.getElementById(
+        "handle-description"
+    ).value = "";
+
+    document.getElementById(
+        "handle-quantity"
+    ).value = "1";
+
+
+    closeHandleForm();
+
+    displayExtras(
+        "handles"
+    );
+}
+
+
+/* =========================
+   LARGE PHOTO
+========================= */
+
+function showHandlePhoto() {
+
+    document.getElementById(
+        "handle-large-photo"
+    ).src =
+        selectedHandlePhoto;
+
+    document.getElementById(
+        "handle-photo-modal"
+    ).style.display =
+        "flex";
+}
+
+
+/* =========================
+   CLOSE LARGE PHOTO
+========================= */
+
+function closeHandlePhoto(event) {
+
+    if (event) {
+        event.stopPropagation();
+    }
+
+    document.getElementById(
+        "handle-photo-modal"
+    ).style.display =
+        "none";
+
+    document.getElementById(
+        "handle-large-photo"
+    ).src = "";
+}
+
+</script>
 
 </body>
 </html>
