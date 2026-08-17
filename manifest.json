@@ -1,0 +1,21 @@
+{
+  "name": "UPVC Repair Van Stock",
+  "short_name": "UPVC Van Stock",
+  "start_url": "/van-stock/",
+  "display": "standalone",
+  "background_color": "#111111",
+  "theme_color": "#0878d1",
+  "description": "UPVC Repair van stock management",
+  "icons": [
+    {
+      "src": "/van-stock/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/van-stock/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
