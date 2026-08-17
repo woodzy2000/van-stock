@@ -24,10 +24,8 @@ function changeQty(id, amount) {
 
     qty.innerText = value;
 
-    // Save quantity
     localStorage.setItem("stock_" + id, value);
 
-    // Save item name
     const stockItem = qty.closest(".stock-item");
 
     if (stockItem) {
@@ -82,7 +80,6 @@ function loadStock() {
             return;
         }
 
-        // Save the item's name
         const stockItem = qty.closest(".stock-item");
 
         if (stockItem) {
@@ -99,7 +96,6 @@ function loadStock() {
             }
         }
 
-        // Get saved quantity
         const saved = localStorage.getItem(
             "stock_" + id
         );
@@ -116,7 +112,7 @@ function loadStock() {
 
 
 // ================================
-// EXTRA STOCK
+// NORMAL EXTRA STOCK
 // ================================
 
 function addExtra(type) {
@@ -164,7 +160,7 @@ function addExtra(type) {
 
 
 // ================================
-// DISPLAY EXTRAS
+// DISPLAY EXTRA STOCK
 // ================================
 
 function displayExtras(type) {
@@ -189,26 +185,91 @@ function displayExtras(type) {
 
         item.className = "stock-item";
 
-        item.innerHTML = `
-            <span>${extra.description}</span>
+        // PRODUCT NAME
+        const name = document.createElement("span");
+        name.innerText = extra.description;
 
-            <button onclick="changeExtraQty('${type}', '${extra.id}', -1)">
-                -
-            </button>
+        // PHOTO
+        if (extra.photo) {
 
-            <span class="qty" id="${extra.id}">
-                ${extra.quantity}
-            </span>
+            const photo = document.createElement("img");
 
-            <button onclick="changeExtraQty('${type}', '${extra.id}', 1)">
-                +
-            </button>
+            photo.src = extra.photo;
 
-            <button class="delete-extra"
-                onclick="deleteExtra('${type}', '${extra.id}')">
-                ×
-            </button>
-        `;
+            photo.alt = extra.description;
+
+            photo.style.width = "80px";
+            photo.style.height = "80px";
+            photo.style.objectFit = "cover";
+            photo.style.borderRadius = "8px";
+            photo.style.marginRight = "10px";
+            photo.style.cursor = "pointer";
+
+            // Tap photo to view larger
+            photo.onclick = function() {
+                window.open(extra.photo, "_blank");
+            };
+
+            item.appendChild(photo);
+        }
+
+        item.appendChild(name);
+
+        // MINUS
+        const minus = document.createElement("button");
+
+        minus.innerText = "-";
+
+        minus.onclick = function() {
+            changeExtraQty(
+                type,
+                extra.id,
+                -1
+            );
+        };
+
+        // QUANTITY
+        const quantity = document.createElement("span");
+
+        quantity.className = "qty";
+
+        quantity.id = extra.id;
+
+        quantity.innerText = extra.quantity;
+
+        // PLUS
+        const plus = document.createElement("button");
+
+        plus.innerText = "+";
+
+        plus.onclick = function() {
+            changeExtraQty(
+                type,
+                extra.id,
+                1
+            );
+        };
+
+        // DELETE
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.className =
+            "delete-extra";
+
+        deleteButton.innerText = "×";
+
+        deleteButton.onclick = function() {
+            deleteExtra(
+                type,
+                extra.id
+            );
+        };
+
+        item.appendChild(minus);
+        item.appendChild(quantity);
+        item.appendChild(plus);
+        item.appendChild(deleteButton);
 
         area.appendChild(item);
 
@@ -277,6 +338,163 @@ function deleteExtra(type, id) {
     );
 
     displayExtras(type);
+}
+
+
+// ================================
+// ADDITIONAL HINGE PHOTO
+// ================================
+
+function saveHingeWithPhoto(
+    description,
+    quantity,
+    photo
+) {
+
+    const id = "hinges_" + Date.now();
+
+    // If there is a photo, compress it first.
+    if (photo) {
+
+        compressHingePhoto(
+            photo,
+            function(compressedPhoto) {
+
+                saveHingeItem(
+                    id,
+                    description,
+                    quantity,
+                    compressedPhoto
+                );
+
+            }
+        );
+
+    } else {
+
+        saveHingeItem(
+            id,
+            description,
+            quantity,
+            ""
+        );
+    }
+}
+
+
+// ================================
+// SAVE HINGE ITEM
+// ================================
+
+function saveHingeItem(
+    id,
+    description,
+    quantity,
+    photo
+) {
+
+    const extra = {
+        id: id,
+        description: description.trim(),
+        quantity: quantity,
+        photo: photo
+    };
+
+    let extras = JSON.parse(
+        localStorage.getItem("hinges_extras")
+    ) || [];
+
+    extras.push(extra);
+
+    try {
+
+        localStorage.setItem(
+            "hinges_extras",
+            JSON.stringify(extras)
+        );
+
+    } catch (error) {
+
+        alert(
+            "The photo is too large to save. Please try another photo."
+        );
+
+        return;
+    }
+
+    displayExtras("hinges");
+}
+
+
+// ================================
+// COMPRESS HINGE PHOTO
+// ================================
+
+function compressHingePhoto(
+    dataUrl,
+    callback
+) {
+
+    const image = new Image();
+
+    image.onload = function() {
+
+        const maxSize = 1000;
+
+        let width = image.width;
+        let height = image.height;
+
+        if (width > height) {
+
+            if (width > maxSize) {
+                height =
+                    height * (maxSize / width);
+
+                width = maxSize;
+            }
+
+        } else {
+
+            if (height > maxSize) {
+                width =
+                    width * (maxSize / height);
+
+                height = maxSize;
+            }
+        }
+
+        const canvas =
+            document.createElement("canvas");
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const context =
+            canvas.getContext("2d");
+
+        context.drawImage(
+            image,
+            0,
+            0,
+            width,
+            height
+        );
+
+        const compressed =
+            canvas.toDataURL(
+                "image/jpeg",
+                0.70
+            );
+
+        callback(compressed);
+    };
+
+    image.onerror = function() {
+
+        callback("");
+    };
+
+    image.src = dataUrl;
 }
 
 
