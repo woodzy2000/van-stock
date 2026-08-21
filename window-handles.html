@@ -426,13 +426,45 @@ function saveExtraHandle() {
         "handles_" + Date.now();
 
 
-    let extras =
-        JSON.parse(
-            localStorage.getItem(
-                "handles_extras"
-            )
-        ) || [];
+    // No photo
+    if (!selectedHandlePhoto) {
 
+        saveHandleItem(
+            id,
+            description,
+            quantity,
+            ""
+        );
+
+        return;
+    }
+
+
+    // Compress photo before saving
+    compressHandlePhoto(
+        selectedHandlePhoto,
+        function(compressedPhoto) {
+
+            saveHandleItem(
+                id,
+                description,
+                quantity,
+                compressedPhoto
+            );
+
+        }
+    );
+}
+/* =========================
+   SAVE HANDLE ITEM
+========================= */
+
+function saveHandleItem(
+    id,
+    description,
+    quantity,
+    photo
+) {
 
     const extra = {
 
@@ -445,9 +477,17 @@ function saveExtraHandle() {
             quantity,
 
         photo:
-            selectedHandlePhoto
+            photo
 
     };
+
+
+    let extras =
+        JSON.parse(
+            localStorage.getItem(
+                "handles_extras"
+            )
+        ) || [];
 
 
     extras.push(extra);
@@ -481,6 +521,7 @@ function saveExtraHandle() {
 
     closeHandleForm();
 
+
     displayExtras(
         "handles"
     );
@@ -488,22 +529,140 @@ function saveExtraHandle() {
 
 
 /* =========================
+   COMPRESS HANDLE PHOTO
+========================= */
+
+function compressHandlePhoto(
+    dataUrl,
+    callback
+) {
+
+    const image =
+        new Image();
+
+
+    image.onload =
+        function() {
+
+            const maxSize =
+                1000;
+
+            let width =
+                image.width;
+
+            let height =
+                image.height;
+
+
+            if (width > height) {
+
+                if (width > maxSize) {
+
+                    height =
+                        height *
+                        (maxSize / width);
+
+                    width =
+                        maxSize;
+
+                }
+
+            } else {
+
+                if (height > maxSize) {
+
+                    width =
+                        width *
+                        (maxSize / height);
+
+                    height =
+                        maxSize;
+
+                }
+
+            }
+
+
+            const canvas =
+                document.createElement(
+                    "canvas"
+                );
+
+
+            canvas.width =
+                width;
+
+            canvas.height =
+                height;
+
+
+            const context =
+                canvas.getContext(
+                    "2d"
+                );
+
+
+            context.drawImage(
+                image,
+                0,
+                0,
+                width,
+                height
+            );
+
+
+            const compressed =
+                canvas.toDataURL(
+                    "image/jpeg",
+                    0.70
+                );
+
+
+            callback(
+                compressed
+            );
+
+        };
+
+
+    image.onerror =
+        function() {
+
+            alert(
+                "The photo could not be processed."
+            );
+
+            callback("");
+
+        };
+
+
+    image.src =
+        dataUrl;
+}
+/* =========================
    LARGE PHOTO
 ========================= */
 
-function showHandlePhoto() {
+function showHandlePhoto(photo) {
+
+    // If no photo was passed, use the selected photo
+    if (!photo) {
+        photo = selectedHandlePhoto;
+    }
+
+    if (!photo) {
+        return;
+    }
 
     document.getElementById(
         "handle-large-photo"
-    ).src =
-        selectedHandlePhoto;
+    ).src = photo;
 
     document.getElementById(
         "handle-photo-modal"
-    ).style.display =
-        "flex";
+    ).style.display = "flex";
 }
-
 
 /* =========================
    CLOSE LARGE PHOTO
