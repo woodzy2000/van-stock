@@ -1,690 +1,109 @@
-// ================================
-// NORMAL STOCK
-// ================================
+function updateLowStock(item, value) {
+	if (item) item.classList.toggle("low-stock", value <= 1);
+}
 
 function changeQty(id, amount) {
-
-    const qty = document.getElementById(id);
-
-    if (!qty) return;
-
-    let value = parseInt(qty.innerText);
-
-    if (isNaN(value)) value = 0;
-
-    value += amount;
-
-    if (value < 0) value = 0;
-
-    qty.innerText = value;
-
-    localStorage.setItem("stock_" + id, value);
-
-    const stockItem = qty.closest(".stock-item");
-
-    if (stockItem) {
-
-        const name = stockItem.querySelector("span:first-child");
-
-        if (name) {
-            localStorage.setItem(
-                "stock_name_" + id,
-                name.innerText.trim()
-            );
-        }
-
-        updateLowStock(stockItem, value);
-    }
+	const qty = document.getElementById(id);
+	if (!qty) return;
+	let value = parseInt(qty.innerText, 10) || 0;
+	value = Math.max(0, value + amount);
+	qty.innerText = value;
+	localStorage.setItem("stock_" + id, value);
+	const item = qty.closest(".stock-item");
+	if (item) {
+		const name = item.querySelector("span:first-child");
+		if (name) localStorage.setItem("stock_name_" + id, name.innerText.trim());
+		updateLowStock(item, value);
+	}
 }
-
-
-// ================================
-// LOW STOCK
-// ================================
-
-function updateLowStock(stockItem, value) {
-
-    if (!stockItem) return;
-
-    if (value <= 1) {
-        stockItem.classList.add("low-stock");
-    } else {
-        stockItem.classList.remove("low-stock");
-    }
-}
-
-
-// ================================
-// LOAD NORMAL STOCK
-// ================================
 
 function loadStock() {
-
-    const quantities =
-        document.querySelectorAll(".stock-item .qty");
-
-    quantities.forEach(function(qty) {
-
-        const id = qty.id;
-
-        if (!id) return;
-
-        const stockItem =
-            qty.closest(".stock-item");
-
-        if (stockItem) {
-
-            const name =
-                stockItem.querySelector(
-                    "span:first-child"
-                );
-
-            if (name) {
-
-                localStorage.setItem(
-                    "stock_name_" + id,
-                    name.innerText.trim()
-                );
-            }
-        }
-
-        const saved =
-            localStorage.getItem(
-                "stock_" + id
-            );
-
-        if (saved !== null) {
-            qty.innerText = saved;
-        }
-
-        const value =
-            parseInt(qty.innerText) || 0;
-
-        updateLowStock(
-            stockItem,
-            value
-        );
-    });
+	document.querySelectorAll(".stock-item .qty").forEach(qty => {
+		const id = qty.id;
+		if (!id) return;
+		const item = qty.closest(".stock-item");
+		const name = item && item.querySelector("span:first-child");
+		if (name) localStorage.setItem("stock_name_" + id, name.innerText.trim());
+		const saved = localStorage.getItem("stock_" + id);
+		if (saved !== null) qty.innerText = saved;
+		updateLowStock(item, parseInt(qty.innerText, 10) || 0);
+	});
 }
 
-
-// ================================
-// OLD EXTRA STOCK
-// ================================
+function getExtras(type) {
+	try { return JSON.parse(localStorage.getItem(type + "_extras")) || []; }
+	catch (_) { return []; }
+}
 
 function addExtra(type) {
-
-    const description =
-        prompt("Enter item description:");
-
-    if (!description ||
-        description.trim() === "") {
-        return;
-    }
-
-    let quantity =
-        prompt("Enter quantity:", "1");
-
-    quantity = parseInt(quantity);
-
-    if (isNaN(quantity) ||
-        quantity < 0) {
-        quantity = 0;
-    }
-
-    const id =
-        type + "_" + Date.now();
-
-    const extra = {
-        id: id,
-        description: description.trim(),
-        quantity: quantity
-    };
-
-    let extras =
-        JSON.parse(
-            localStorage.getItem(
-                type + "_extras"
-            )
-        ) || [];
-
-    extras.push(extra);
-
-    localStorage.setItem(
-        type + "_extras",
-        JSON.stringify(extras)
-    );
-
-    displayExtras(type);
+	const description = prompt("Enter item description:");
+	if (!description || !description.trim()) return;
+	let quantity = parseInt(prompt("Enter quantity:", "1"), 10);
+	if (isNaN(quantity) || quantity < 0) quantity = 0;
+	getExtras(type).push({ id: type + "_" + Date.now(), description: description.trim(), quantity });
+	localStorage.setItem(type + "_extras", JSON.stringify(getExtras(type)));
+	displayExtras(type);
 }
-
-
-// ================================
-// DISPLAY EXTRA STOCK
-// ================================
 
 function displayExtras(type) {
-
-    const area =
-        document.getElementById(
-            type + "-extras"
-        );
-
-    if (!area) return;
-
-    area.innerHTML = "";
-
-    let extras =
-        JSON.parse(
-            localStorage.getItem(
-                type + "_extras"
-            )
-        ) || [];
-
-    extras.forEach(function(extra) {
-
-        const item =
-            document.createElement("div");
-
-        item.className =
-            "stock-item";
-
-
-        // =========================
-        // PHOTO
-        // =========================
-
-        if (extra.photo) {
-
-            const photo =
-                document.createElement("img");
-
-            photo.src =
-                extra.photo;
-
-            photo.alt =
-                extra.description;
-
-            photo.style.width = "80px";
-            photo.style.height = "80px";
-            photo.style.objectFit = "cover";
-            photo.style.borderRadius = "8px";
-            photo.style.marginRight = "10px";
-            photo.style.cursor = "pointer";
-
-
-            photo.onclick = function() {
-
-                // HINGES
-                if (
-                    type === "hinges" &&
-                    typeof showHingePhoto === "function"
-                ) {
-
-                    showHingePhoto(
-                        extra.photo
-                    );
-
-                    return;
-                }
-
-
-                // WINDOW HANDLES
-                if (
-                    type === "handles" &&
-                    typeof showHandlePhoto === "function"
-                ) {
-
-                    selectedHandlePhoto =
-                        extra.photo;
-
-                    showHandlePhoto();
-
-                    return;
-                }
-
-            };
-
-
-            item.appendChild(photo);
-        }
-
-
-        // =========================
-        // NAME
-        // =========================
-
-        const name =
-            document.createElement("span");
-
-        name.innerText =
-            extra.description;
-
-        item.appendChild(name);
-
-
-        // =========================
-        // MINUS
-        // =========================
-
-        const minus =
-            document.createElement("button");
-
-        minus.innerText = "-";
-
-        minus.onclick = function() {
-
-            changeExtraQty(
-                type,
-                extra.id,
-                -1
-            );
-
-        };
-
-        item.appendChild(minus);
-
-
-        // =========================
-        // QUANTITY
-        // =========================
-
-        const quantity =
-            document.createElement("span");
-
-        quantity.className = "qty";
-
-        quantity.id =
-            extra.id;
-
-        quantity.innerText =
-            extra.quantity;
-
-        item.appendChild(quantity);
-
-
-        // =========================
-        // PLUS
-        // =========================
-
-        const plus =
-            document.createElement("button");
-
-        plus.innerText = "+";
-
-        plus.onclick = function() {
-
-            changeExtraQty(
-                type,
-                extra.id,
-                1
-            );
-
-        };
-
-        item.appendChild(plus);
-
-
-        // =========================
-        // DELETE
-        // =========================
-
-        const deleteButton =
-            document.createElement("button");
-
-        deleteButton.className =
-            "delete-extra";
-
-        deleteButton.innerText =
-            "×";
-
-        deleteButton.onclick =
-            function() {
-
-                deleteExtra(
-                    type,
-                    extra.id
-                );
-
-            };
-
-        item.appendChild(
-            deleteButton
-        );
-
-
-        area.appendChild(item);
-
-
-        updateLowStock(
-            item,
-            extra.quantity
-        );
-
-    });
+	const area = document.getElementById(type + "-extras");
+	if (!area) return;
+	area.innerHTML = "";
+	getExtras(type).forEach(extra => {
+		const item = document.createElement("div"); item.className = "stock-item";
+		if (extra.photo) {
+			const photo = document.createElement("img");
+			Object.assign(photo, { src: extra.photo, alt: extra.description });
+			photo.style.cssText = "width:80px;height:80px;object-fit:cover;border-radius:8px;margin-right:10px;cursor:pointer";
+			const viewers = { hinges: "showHingePhoto", handles: "showHandlePhoto", "window-locks": "showWindowLockPhoto" };
+			photo.onclick = () => { if (viewers[type] && typeof window[viewers[type]] === "function") window[viewers[type]](extra.photo); };
+			item.appendChild(photo);
+		}
+		const name = document.createElement("span"); name.innerText = extra.description; item.appendChild(name);
+		const minus = document.createElement("button"); minus.innerText = "-"; minus.onclick = () => changeExtraQty(type, extra.id, -1); item.appendChild(minus);
+		const qty = document.createElement("span"); qty.className = "qty"; qty.id = extra.id; qty.innerText = extra.quantity; item.appendChild(qty);
+		const plus = document.createElement("button"); plus.innerText = "+"; plus.onclick = () => changeExtraQty(type, extra.id, 1); item.appendChild(plus);
+		const del = document.createElement("button"); del.className = "delete-extra"; del.innerText = "×"; del.onclick = () => deleteExtra(type, extra.id); item.appendChild(del);
+		area.appendChild(item); updateLowStock(item, extra.quantity);
+	});
 }
 
-
-// ================================
-// CHANGE EXTRA QUANTITY
-// ================================
-
-function changeExtraQty(
-    type,
-    id,
-    amount
-) {
-
-    let extras =
-        JSON.parse(
-            localStorage.getItem(
-                type + "_extras"
-            )
-        ) || [];
-
-    const extra =
-        extras.find(
-            function(item) {
-                return item.id === id;
-            }
-        );
-
-    if (!extra) return;
-
-    extra.quantity += amount;
-
-    if (extra.quantity < 0) {
-        extra.quantity = 0;
-    }
-
-    localStorage.setItem(
-        type + "_extras",
-        JSON.stringify(extras)
-    );
-
-    displayExtras(type);
+function changeExtraQty(type, id, amount) {
+	const extras = getExtras(type), extra = extras.find(x => x.id === id);
+	if (!extra) return;
+	extra.quantity = Math.max(0, extra.quantity + amount);
+	localStorage.setItem(type + "_extras", JSON.stringify(extras)); displayExtras(type);
 }
 
-
-// ================================
-// DELETE EXTRA
-// ================================
-
-function deleteExtra(
-    type,
-    id
-) {
-
-    if (
-        !confirm(
-            "Remove this extra item?"
-        )
-    ) {
-        return;
-    }
-
-    let extras =
-        JSON.parse(
-            localStorage.getItem(
-                type + "_extras"
-            )
-        ) || [];
-
-    extras =
-        extras.filter(
-            function(item) {
-                return item.id !== id;
-            }
-        );
-
-    localStorage.setItem(
-        type + "_extras",
-        JSON.stringify(extras)
-    );
-
-    displayExtras(type);
+function deleteExtra(type, id) {
+	if (!confirm("Remove this extra item?")) return;
+	localStorage.setItem(type + "_extras", JSON.stringify(getExtras(type).filter(x => x.id !== id)));
+	displayExtras(type);
 }
 
-
-// ================================
-// ADDITIONAL HINGE PHOTO
-// ================================
-
-function saveHingeWithPhoto(
-    description,
-    quantity,
-    photo
-) {
-
-    const id =
-        "hinges_" + Date.now();
-
-
-    if (photo) {
-
-        compressHingePhoto(
-            photo,
-            function(compressedPhoto) {
-
-                saveHingeItem(
-                    id,
-                    description,
-                    quantity,
-                    compressedPhoto
-                );
-
-            }
-        );
-
-    } else {
-
-        saveHingeItem(
-            id,
-            description,
-            quantity,
-            ""
-        );
-
-    }
+function compressHingePhoto(dataUrl, callback) {
+	const image = new Image();
+	image.onload = () => {
+		const max = 1000, scale = Math.min(1, max / Math.max(image.width, image.height));
+		const canvas = document.createElement("canvas"); canvas.width = image.width * scale; canvas.height = image.height * scale;
+		canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height); callback(canvas.toDataURL("image/jpeg", .7));
+	};
+	image.onerror = () => callback(""); image.src = dataUrl;
 }
 
-
-// ================================
-// SAVE HINGE
-// ================================
-
-function saveHingeItem(
-    id,
-    description,
-    quantity,
-    photo
-) {
-
-    const extra = {
-
-        id: id,
-
-        description:
-            description.trim(),
-
-        quantity:
-            quantity,
-
-        photo:
-            photo
-
-    };
-
-
-    let extras =
-        JSON.parse(
-            localStorage.getItem(
-                "hinges_extras"
-            )
-        ) || [];
-
-
-    extras.push(extra);
-
-
-    try {
-
-        localStorage.setItem(
-            "hinges_extras",
-            JSON.stringify(extras)
-        );
-
-    } catch (error) {
-
-        alert(
-            "The photo is too large to save. Please try another photo."
-        );
-
-        return;
-    }
-
-
-    displayExtras(
-        "hinges"
-    );
+function saveHingeWithPhoto(description, quantity, photo) {
+	const save = image => saveHingeItem("hinges_" + Date.now(), description, quantity, image);
+	photo ? compressHingePhoto(photo, save) : save("");
 }
 
-
-// ================================
-// COMPRESS HINGE PHOTO
-// ================================
-
-function compressHingePhoto(
-    dataUrl,
-    callback
-) {
-
-    const image =
-        new Image();
-
-
-    image.onload =
-        function() {
-
-            const maxSize =
-                1000;
-
-            let width =
-                image.width;
-
-            let height =
-                image.height;
-
-
-            if (width > height) {
-
-                if (width > maxSize) {
-
-                    height =
-                        height *
-                        (maxSize / width);
-
-                    width =
-                        maxSize;
-                }
-
-            } else {
-
-                if (height > maxSize) {
-
-                    width =
-                        width *
-                        (maxSize / height);
-
-                    height =
-                        maxSize;
-                }
-            }
-
-
-            const canvas =
-                document.createElement(
-                    "canvas"
-                );
-
-
-            canvas.width =
-                width;
-
-            canvas.height =
-                height;
-
-
-            const context =
-                canvas.getContext(
-                    "2d"
-                );
-
-
-            context.drawImage(
-                image,
-                0,
-                0,
-                width,
-                height
-            );
-
-
-            const compressed =
-                canvas.toDataURL(
-                    "image/jpeg",
-                    0.70
-                );
-
-
-            callback(
-                compressed
-            );
-
-        };
-
-
-    image.onerror =
-        function() {
-
-            callback("");
-
-        };
-
-
-    image.src =
-        dataUrl;
+function saveHingeItem(id, description, quantity, photo) {
+	const extras = getExtras("hinges"); extras.push({ id, description: description.trim(), quantity, photo });
+	try { localStorage.setItem("hinges_extras", JSON.stringify(extras)); }
+	catch (_) { alert("The photo is too large to save. Please try another photo."); return; }
+	displayExtras("hinges");
 }
 
-
-// ================================
-// PAGE START
-// ================================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-        loadStock();
-
-        const extraAreas =
-            document.querySelectorAll(
-                "[id$='-extras']"
-            );
-
-        extraAreas.forEach(
-            function(area) {
-
-                const type =
-                    area.id.replace(
-                        "-extras",
-                        ""
-                    );
-
-                displayExtras(type);
-
-            }
-        );
-
-    }
-);
+document.addEventListener("DOMContentLoaded", () => {
+	loadStock();
+	document.querySelectorAll("[id$='-extras']").forEach(area => displayExtras(area.id.replace("-extras", "")));
+});
