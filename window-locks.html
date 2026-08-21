@@ -1,127 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Window Locks</title>
-    <link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Window Locks - UPVC Repair Van Stock</title>
+	<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
 <div class="header">
-    <h1>Window Locks</h1>
-    <p>Van Stock</p>
+	<h1>Window Locks</h1>
+	<p>UPVC Repair - Van Stock</p>
 </div>
 
 <div class="container">
+	<button class="menu-button" onclick="window.location='index.html'">← Back</button>
 
-    <button class="menu-button" onclick="window.location='index.html'">
-        ← Back
-    </button>
+	<h2>20mm Backset</h2>
+	<div class="stock-item"><span>250mm</span><button onclick="changeQty('lock20_250', -1)">-</button><span class="qty" id="lock20_250">0</span><button onclick="changeQty('lock20_250', 1)">+</button></div>
+	<div class="stock-item"><span>400mm</span><button onclick="changeQty('lock20_400', -1)">-</button><span class="qty" id="lock20_400">0</span><button onclick="changeQty('lock20_400', 1)">+</button></div>
+	<div class="stock-item"><span>600mm</span><button onclick="changeQty('lock20_600', -1)">-</button><span class="qty" id="lock20_600">0</span><button onclick="changeQty('lock20_600', 1)">+</button></div>
+	<div class="stock-item"><span>800mm</span><button onclick="changeQty('lock20_800', -1)">-</button><span class="qty" id="lock20_800">0</span><button onclick="changeQty('lock20_800', 1)">+</button></div>
+	<div class="stock-item"><span>1000mm</span><button onclick="changeQty('lock20_1000', -1)">-</button><span class="qty" id="lock20_1000">0</span><button onclick="changeQty('lock20_1000', 1)">+</button></div>
+	<div class="stock-item"><span>1200mm</span><button onclick="changeQty('lock20_1200', -1)">-</button><span class="qty" id="lock20_1200">0</span><button onclick="changeQty('lock20_1200', 1)">+</button></div>
 
-    <h2>20mm Backset</h2>
+	<h2>22mm Backset</h2>
+	<div class="stock-item"><span>250mm</span><button onclick="changeQty('lock22_250', -1)">-</button><span class="qty" id="lock22_250">0</span><button onclick="changeQty('lock22_250', 1)">+</button></div>
+	<div class="stock-item"><span>400mm</span><button onclick="changeQty('lock22_400', -1)">-</button><span class="qty" id="lock22_400">0</span><button onclick="changeQty('lock22_400', 1)">+</button></div>
+	<div class="stock-item"><span>600mm</span><button onclick="changeQty('lock22_600', -1)">-</button><span class="qty" id="lock22_600">0</span><button onclick="changeQty('lock22_600', 1)">+</button></div>
+	<div class="stock-item"><span>800mm</span><button onclick="changeQty('lock22_800', -1)">-</button><span class="qty" id="lock22_800">0</span><button onclick="changeQty('lock22_800', 1)">+</button></div>
+	<div class="stock-item"><span>1000mm</span><button onclick="changeQty('lock22_1000', -1)">-</button><span class="qty" id="lock22_1000">0</span><button onclick="changeQty('lock22_1000', 1)">+</button></div>
+	<div class="stock-item"><span>1200mm</span><button onclick="changeQty('lock22_1200', -1)">-</button><span class="qty" id="lock22_1200">0</span><button onclick="changeQty('lock22_1200', 1)">+</button></div>
 
-    <div class="stock-item">
-        <span>250mm</span>
-        <button onclick="changeQty('lock20_250', -1)">-</button>
-        <span class="qty" id="lock20_250">0</span>
-        <button onclick="changeQty('lock20_250', 1)">+</button>
-    </div>
+	<h2>Additional Window Locks</h2>
+	<div id="window-locks-extras"></div>
+	<button class="menu-button" type="button" onclick="openWindowLockForm()">＋ Add Extra Window Lock</button>
 
-    <div class="stock-item">
-        <span>400mm</span>
-        <button onclick="changeQty('lock20_400', -1)">-</button>
-        <span class="qty" id="lock20_400">0</span>
-        <button onclick="changeQty('lock20_400', 1)">+</button>
-    </div>
+	<div id="window-lock-form" style="display:none; margin-top:20px;">
+		<h3>Add Extra Window Lock</h3>
+		<label for="window-lock-description">Product name</label>
+		<input type="text" id="window-lock-description" placeholder="Enter lock name" style="width:100%; box-sizing:border-box; padding:12px; margin-top:5px;">
+		<label for="window-lock-quantity" style="display:block; margin-top:15px;">Quantity</label>
+		<input type="number" id="window-lock-quantity" value="1" min="0" style="width:100%; box-sizing:border-box; padding:12px; margin-top:5px;">
+		<label style="display:block; margin-top:15px;">Photo</label>
+		<input type="file" id="window-lock-camera" accept="image/*" capture="environment" style="display:none;">
+		<button class="menu-button" type="button" onclick="document.getElementById('window-lock-camera').click()">📷 Take Photo</button>
+		<input type="file" id="window-lock-library" accept="image/*" style="display:none;">
+		<button class="menu-button" type="button" onclick="document.getElementById('window-lock-library').click()">🖼️ Choose Photo</button>
+		<div id="window-lock-photo-preview" style="margin-top:15px; text-align:center;"></div>
+		<button class="menu-button" type="button" onclick="saveExtraWindowLock()" style="margin-top:20px;">Save Window Lock</button>
+		<button class="menu-button" type="button" onclick="closeWindowLockForm()">Cancel</button>
+	</div>
+</div>
 
-    <div class="stock-item">
-        <span>600mm</span>
-        <button onclick="changeQty('lock20_600', -1)">-</button>
-        <span class="qty" id="lock20_600">0</span>
-        <button onclick="changeQty('lock20_600', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>800mm</span>
-        <button onclick="changeQty('lock20_800', -1)">-</button>
-        <span class="qty" id="lock20_800">0</span>
-        <button onclick="changeQty('lock20_800', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>1000mm</span>
-        <button onclick="changeQty('lock20_1000', -1)">-</button>
-        <span class="qty" id="lock20_1000">0</span>
-        <button onclick="changeQty('lock20_1000', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>1200mm</span>
-        <button onclick="changeQty('lock20_1200', -1)">-</button>
-        <span class="qty" id="lock20_1200">0</span>
-        <button onclick="changeQty('lock20_1200', 1)">+</button>
-    </div>
-
-
-    <h2>22mm Backset</h2>
-
-    <div class="stock-item">
-        <span>250mm</span>
-        <button onclick="changeQty('lock22_250', -1)">-</button>
-        <span class="qty" id="lock22_250">0</span>
-        <button onclick="changeQty('lock22_250', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>400mm</span>
-        <button onclick="changeQty('lock22_400', -1)">-</button>
-        <span class="qty" id="lock22_400">0</span>
-        <button onclick="changeQty('lock22_400', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>600mm</span>
-        <button onclick="changeQty('lock22_600', -1)">-</button>
-        <span class="qty" id="lock22_600">0</span>
-        <button onclick="changeQty('lock22_600', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>800mm</span>
-        <button onclick="changeQty('lock22_800', -1)">-</button>
-        <span class="qty" id="lock22_800">0</span>
-        <button onclick="changeQty('lock22_800', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>1000mm</span>
-        <button onclick="changeQty('lock22_1000', -1)">-</button>
-        <span class="qty" id="lock22_1000">0</span>
-        <button onclick="changeQty('lock22_1000', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>1200mm</span>
-        <button onclick="changeQty('lock22_1200', -1)">-</button>
-        <span class="qty" id="lock22_1200">0</span>
-        <button onclick="changeQty('lock22_1200', 1)">+</button>
-    </div>
-
-
-    <h2>Additional Window Locks</h2>
-
-    <div id="window-locks-extras"></div>
-
-    <button class="menu-button" onclick="addExtra('window-locks')">
-        ＋ Add Extra Window Lock
-    </button>
-
+<div id="window-lock-photo-modal" onclick="closeWindowLockPhoto()" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.95); align-items:center; justify-content:center;">
+	<img id="window-lock-large-photo" src="" alt="Window lock photo" style="max-width:95%; max-height:90%; object-fit:contain; border-radius:10px;">
+	<button type="button" onclick="closeWindowLockPhoto(event)" style="position:absolute; top:20px; right:20px; font-size:30px; background:none; border:none; color:white;">×</button>
 </div>
 
 <script src="app.js"></script>
-
+<script>
+let selectedWindowLockPhoto = "";
+function openWindowLockForm() { document.getElementById("window-lock-form").style.display = "block"; }
+function closeWindowLockForm() {
+	document.getElementById("window-lock-form").style.display = "none";
+	selectedWindowLockPhoto = "";
+	document.getElementById("window-lock-photo-preview").innerHTML = "";
+	document.getElementById("window-lock-camera").value = "";
+	document.getElementById("window-lock-library").value = "";
+}
+function handleWindowLockPhoto(event) {
+	const file = event.target.files[0];
+	if (!file) return;
+	const reader = new FileReader();
+	reader.onload = function(e) {
+		selectedWindowLockPhoto = e.target.result;
+		document.getElementById("window-lock-photo-preview").innerHTML = `<img src="${selectedWindowLockPhoto}" onclick="showWindowLockPhoto(selectedWindowLockPhoto)" style="width:100px;height:100px;object-fit:cover;border-radius:10px;cursor:pointer;"><p>Tap photo to view large</p>`;
+	};
+	reader.readAsDataURL(file);
+}
+document.getElementById("window-lock-camera").addEventListener("change", handleWindowLockPhoto);
+document.getElementById("window-lock-library").addEventListener("change", handleWindowLockPhoto);
+function saveExtraWindowLock() {
+	const description = document.getElementById("window-lock-description").value.trim();
+	const quantity = parseInt(document.getElementById("window-lock-quantity").value, 10) || 0;
+	if (!description) { alert("Please enter a product name."); return; }
+	const extras = JSON.parse(localStorage.getItem("window-locks_extras")) || [];
+	extras.push({ id: "window-locks_" + Date.now(), description, quantity, photo: selectedWindowLockPhoto });
+	try { localStorage.setItem("window-locks_extras", JSON.stringify(extras)); }
+	catch (error) { alert("The photo is too large to save. Please try another photo."); return; }
+	document.getElementById("window-lock-description").value = "";
+	document.getElementById("window-lock-quantity").value = "1";
+	closeWindowLockForm();
+	displayExtras("window-locks");
+}
+function showWindowLockPhoto(photo) { if (!photo) return; document.getElementById("window-lock-large-photo").src = photo; document.getElementById("window-lock-photo-modal").style.display = "flex"; }
+function closeWindowLockPhoto(event) { if (event) event.stopPropagation(); document.getElementById("window-lock-photo-modal").style.display = "none"; document.getElementById("window-lock-large-photo").src = ""; }
+</script>
 </body>
 </html>
