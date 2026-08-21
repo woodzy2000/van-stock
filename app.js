@@ -58,8 +58,9 @@ function displayExtras(type) {
 			 const viewers = {
     hinges: "showHingePhoto",
     handles: "showHandlePhoto",
-    "window-locks": "showWindowLockPhoto",
-    "euro-cylinders": "showEuroCylinderPhoto"
+   "window-locks": "showWindowLockPhoto",
+"euro-cylinders": "showEuroCylinderPhoto",
+"door-handles": "showDoorHandlePhoto"
 };
 			photo.onclick = () => { if (viewers[type] && typeof window[viewers[type]] === "function") window[viewers[type]](extra.photo); };
 			item.appendChild(photo);

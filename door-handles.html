@@ -1,60 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Door Handles</title>
-    <link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Door Handles - UPVC Repair Van Stock</title>
+	<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
 <div class="header">
-    <h1>Door Handles</h1>
-    <p>Van Stock</p>
+	<h1>Door Handles</h1>
+	<p>UPVC Repair - Van Stock</p>
+</div>
+<div class="container">
+	<button class="menu-button" onclick="window.location='index.html'">← Back</button>
+
+	<h2>White Lever / Lever</h2>
+	<div class="stock-item"><span>122</span><button onclick="changeQty('door122', -1)">-</button><span class="qty" id="door122">0</span><button onclick="changeQty('door122', 1)">+</button></div>
+	<div class="stock-item"><span>210</span><button onclick="changeQty('door210', -1)">-</button><span class="qty" id="door210">0</span><button onclick="changeQty('door210', 1)">+</button></div>
+	<div class="stock-item"><span>215</span><button onclick="changeQty('door215', -1)">-</button><span class="qty" id="door215">0</span><button onclick="changeQty('door215', 1)">+</button></div>
+
+	<h2>Additional Door Handles</h2>
+	<div id="door-handles-extras"></div>
+	<button class="menu-button" type="button" onclick="openDoorHandleForm()">＋ Add Extra Door Handle</button>
+
+	<div id="door-handle-form" style="display:none;margin-top:20px;">
+		<h3>Add Extra Door Handle</h3>
+		<label>Product name</label>
+		<input type="text" id="door-handle-description" placeholder="Enter handle name" style="width:100%;box-sizing:border-box;padding:12px;margin-top:5px;">
+		<label style="display:block;margin-top:15px;">Quantity</label>
+		<input type="number" id="door-handle-quantity" value="1" min="0" style="width:100%;box-sizing:border-box;padding:12px;margin-top:5px;">
+		<label style="display:block;margin-top:15px;">Photo</label>
+		<input type="file" id="door-handle-camera" accept="image/*" capture="environment" style="display:none;">
+		<button class="menu-button" type="button" onclick="document.getElementById('door-handle-camera').click()">📷 Take Photo</button>
+		<input type="file" id="door-handle-library" accept="image/*" style="display:none;">
+		<button class="menu-button" type="button" onclick="document.getElementById('door-handle-library').click()">🖼️ Choose Photo</button>
+		<div id="door-handle-photo-preview" style="margin-top:15px;text-align:center;"></div>
+		<button class="menu-button" type="button" onclick="saveExtraDoorHandle()" style="margin-top:20px;">Save Door Handle</button>
+		<button class="menu-button" type="button" onclick="closeDoorHandleForm()">Cancel</button>
+	</div>
 </div>
 
-<div class="container">
-
-    <button class="menu-button" onclick="window.location='index.html'">
-        ← Back
-    </button>
-
-    <h2>White Lever / Lever</h2>
-
-    <div class="stock-item">
-        <span>122</span>
-        <button onclick="changeQty('door122', -1)">-</button>
-        <span class="qty" id="door122">0</span>
-        <button onclick="changeQty('door122', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>210</span>
-        <button onclick="changeQty('door210', -1)">-</button>
-        <span class="qty" id="door210">0</span>
-        <button onclick="changeQty('door210', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>215</span>
-        <button onclick="changeQty('door215', -1)">-</button>
-        <span class="qty" id="door215">0</span>
-        <button onclick="changeQty('door215', 1)">+</button>
-    </div>
-
-    <h2>Additional Door Handles</h2>
-
-    <div id="door-handles-extras"></div>
-
-    <button class="menu-button" onclick="addExtra('door-handles')">
-        ＋ Add Extra Door Handle
-    </button>
-
+<div id="door-handle-photo-modal" onclick="closeDoorHandlePhoto()" style="display:none;position:fixed;z-index:9999;inset:0;background:rgba(0,0,0,.95);align-items:center;justify-content:center;">
+	<img id="door-handle-large-photo" src="" alt="Door handle photo" style="max-width:95%;max-height:90%;object-fit:contain;border-radius:10px;">
+	<button type="button" onclick="closeDoorHandlePhoto(event)" style="position:absolute;top:20px;right:20px;font-size:30px;background:none;border:none;color:white;">×</button>
 </div>
 
 <script src="app.js"></script>
-
+<script>
+let selectedDoorHandlePhoto = "";
+function openDoorHandleForm() { document.getElementById("door-handle-form").style.display = "block"; }
+function closeDoorHandleForm() {
+	document.getElementById("door-handle-form").style.display = "none";
+	selectedDoorHandlePhoto = "";
+	document.getElementById("door-handle-photo-preview").innerHTML = "";
+	document.getElementById("door-handle-camera").value = "";
+	document.getElementById("door-handle-library").value = "";
+}
+document.getElementById("door-handle-camera").addEventListener("change", handleDoorHandlePhoto);
+document.getElementById("door-handle-library").addEventListener("change", handleDoorHandlePhoto);
+function handleDoorHandlePhoto(event) {
+	const file = event.target.files[0];
+	if (!file) return;
+	const reader = new FileReader();
+	reader.onload = function(e) {
+		const image = new Image();
+		image.onload = function() {
+			const maxSize = 600, scale = Math.min(1, maxSize / Math.max(image.width, image.height));
+			const canvas = document.createElement("canvas");
+			canvas.width = image.width * scale; canvas.height = image.height * scale;
+			canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+			selectedDoorHandlePhoto = canvas.toDataURL("image/jpeg", 0.5);
+			document.getElementById("door-handle-photo-preview").innerHTML = `<img src="${selectedDoorHandlePhoto}" onclick="showDoorHandlePhoto(selectedDoorHandlePhoto)" style="width:100px;height:100px;object-fit:cover;border-radius:10px;cursor:pointer;"><p>Tap photo to view large</p>`;
+		};
+		image.src = e.target.result;
+	};
+	reader.readAsDataURL(file);
+}
+function saveExtraDoorHandle() {
+	const description = document.getElementById("door-handle-description").value.trim();
+	const quantity = parseInt(document.getElementById("door-handle-quantity").value, 10) || 0;
+	if (!description) { alert("Please enter a product name."); return; }
+	const extras = JSON.parse(localStorage.getItem("door-handles_extras") || "[]");
+	extras.push({ id: "door-handles_" + Date.now(), description, quantity, photo: selectedDoorHandlePhoto });
+	try { localStorage.setItem("door-handles_extras", JSON.stringify(extras)); }
+	catch (error) { alert("There is not enough space to save this photo."); return; }
+	document.getElementById("door-handle-description").value = "";
+	document.getElementById("door-handle-quantity").value = "1";
+	closeDoorHandleForm();
+	displayExtras("door-handles");
+}
+function showDoorHandlePhoto(photo) {
+	if (!photo) return;
+	document.getElementById("door-handle-large-photo").src = photo;
+	document.getElementById("door-handle-photo-modal").style.display = "flex";
+}
+function closeDoorHandlePhoto(event) {
+	if (event) event.stopPropagation();
+	document.getElementById("door-handle-photo-modal").style.display = "none";
+	document.getElementById("door-handle-large-photo").src = "";
+}
+</script>
 </body>
 </html>
