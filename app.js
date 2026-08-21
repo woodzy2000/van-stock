@@ -55,7 +55,12 @@ function displayExtras(type) {
 			const photo = document.createElement("img");
 			Object.assign(photo, { src: extra.photo, alt: extra.description });
 			photo.style.cssText = "width:80px;height:80px;object-fit:cover;border-radius:8px;margin-right:10px;cursor:pointer";
-			const viewers = { hinges: "showHingePhoto", handles: "showHandlePhoto", "window-locks": "showWindowLockPhoto" };
+			 const viewers = {
+    hinges: "showHingePhoto",
+    handles: "showHandlePhoto",
+    "window-locks": "showWindowLockPhoto",
+    "euro-cylinders": "showEuroCylinderPhoto"
+};
 			photo.onclick = () => { if (viewers[type] && typeof window[viewers[type]] === "function") window[viewers[type]](extra.photo); };
 			item.appendChild(photo);
 		}
