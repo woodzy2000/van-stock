@@ -1,110 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Euro Cylinders</title>
-    <link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Euro Cylinders</title>
+	<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
 <div class="header">
-    <h1>Euro Cylinders</h1>
-    <p>Van Stock</p>
+	<h1>Euro Cylinders</h1>
+	<p>UPVC Repair - Van Stock</p>
 </div>
 
 <div class="container">
+	<button class="menu-button" onclick="window.location='index.html'">← Back</button>
+	<h2>Euro Cylinders</h2>
 
-    <button class="menu-button" onclick="window.location='index.html'">
-        ← Back
-    </button>
+	<script>
+		const standardCylinders = [
+			['30/30', 'euro3030'], ['35/35', 'euro3535'], ['40/40', 'euro4040'],
+			['40/45', 'euro4045'], ['40/50', 'euro4050'], ['40/55', 'euro4055'],
+			['45/45', 'euro4545'], ['45/50', 'euro4550'], ['45/55', 'euro4555'],
+			['50/50', 'euro5050']
+		];
+		document.write(standardCylinders.map(([label, id]) => `
+			<div class="stock-item"><span>${label}</span>
+				<button onclick="changeQty('${id}', -1)">-</button>
+				<span class="qty" id="${id}">0</span>
+				<button onclick="changeQty('${id}', 1)">+</button>
+			</div>`).join(''));
+	</script>
 
-    <h2>Euro Cylinders</h2>
+	<h2>Additional Euro Cylinders</h2>
+	<div id="euro-cylinders-extras"></div>
+	<button class="menu-button" type="button" onclick="openEuroCylinderForm()">＋ Add Extra Euro Cylinder</button>
 
-    <div class="stock-item">
-        <span>30/30</span>
-        <button onclick="changeQty('euro3030', -1)">-</button>
-        <span class="qty" id="euro3030">0</span>
-        <button onclick="changeQty('euro3030', 1)">+</button>
-    </div>
+	<div id="euro-cylinder-form" style="display:none;margin-top:20px;">
+		<h3>Add Extra Euro Cylinder</h3>
+		<label>Product name</label>
+		<input type="text" id="euro-cylinder-description" placeholder="e.g. ABS 40/50 Thumbturn" style="width:100%;box-sizing:border-box;padding:12px;margin-top:5px">
+		<label style="display:block;margin-top:15px">Quantity</label>
+		<input type="number" id="euro-cylinder-quantity" value="1" min="0" style="width:100%;box-sizing:border-box;padding:12px;margin-top:5px">
+		<label style="display:block;margin-top:15px">Photo</label>
+		<input type="file" id="euro-cylinder-camera" accept="image/*" capture="environment" style="display:none">
+		<button class="menu-button" type="button" onclick="document.getElementById('euro-cylinder-camera').click()">📷 Take Photo</button>
+		<input type="file" id="euro-cylinder-library" accept="image/*" style="display:none">
+		<button class="menu-button" type="button" onclick="document.getElementById('euro-cylinder-library').click()">🖼️ Choose Photo</button>
+		<div id="euro-cylinder-photo-preview" style="margin-top:15px;text-align:center"></div>
+		<button class="menu-button" type="button" onclick="saveExtraEuroCylinder()" style="margin-top:20px">Save Euro Cylinder</button>
+		<button class="menu-button" type="button" onclick="closeEuroCylinderForm()">Cancel</button>
+	</div>
+</div>
 
-    <div class="stock-item">
-        <span>35/35</span>
-        <button onclick="changeQty('euro3535', -1)">-</button>
-        <span class="qty" id="euro3535">0</span>
-        <button onclick="changeQty('euro3535', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>40/40</span>
-        <button onclick="changeQty('euro4040', -1)">-</button>
-        <span class="qty" id="euro4040">0</span>
-        <button onclick="changeQty('euro4040', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>40/45</span>
-        <button onclick="changeQty('euro4045', -1)">-</button>
-        <span class="qty" id="euro4045">0</span>
-        <button onclick="changeQty('euro4045', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>40/50</span>
-        <button onclick="changeQty('euro4050', -1)">-</button>
-        <span class="qty" id="euro4050">0</span>
-        <button onclick="changeQty('euro4050', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>40/55</span>
-        <button onclick="changeQty('euro4055', -1)">-</button>
-        <span class="qty" id="euro4055">0</span>
-        <button onclick="changeQty('euro4055', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>45/45</span>
-        <button onclick="changeQty('euro4545', -1)">-</button>
-        <span class="qty" id="euro4545">0</span>
-        <button onclick="changeQty('euro4545', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>45/50</span>
-        <button onclick="changeQty('euro4550', -1)">-</button>
-        <span class="qty" id="euro4550">0</span>
-        <button onclick="changeQty('euro4550', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>45/55</span>
-        <button onclick="changeQty('euro4555', -1)">-</button>
-        <span class="qty" id="euro4555">0</span>
-        <button onclick="changeQty('euro4555', 1)">+</button>
-    </div>
-
-    <div class="stock-item">
-        <span>50/50</span>
-        <button onclick="changeQty('euro5050', -1)">-</button>
-        <span class="qty" id="euro5050">0</span>
-        <button onclick="changeQty('euro5050', 1)">+</button>
-    </div>
-
-
-    <h2>Additional Euro Cylinders</h2>
-
-    <div id="euro-cylinders-extras"></div>
-
-    <button class="menu-button" onclick="addExtra('euro-cylinders')">
-        ＋ Add Extra Euro Cylinder
-    </button>
-
+<div id="euro-cylinder-photo-modal" onclick="closeEuroCylinderPhoto()" style="display:none;position:fixed;z-index:9999;inset:0;background:rgba(0,0,0,.95);align-items:center;justify-content:center">
+	<img id="euro-cylinder-large-photo" src="" alt="Euro cylinder photo" style="max-width:95%;max-height:90%;object-fit:contain;border-radius:10px">
+	<button type="button" onclick="closeEuroCylinderPhoto(event)" style="position:absolute;top:20px;right:20px;font-size:30px;background:none;border:none;color:white">×</button>
 </div>
 
 <script src="app.js"></script>
-
+<script>
+let selectedEuroCylinderPhoto = '';
+function openEuroCylinderForm() { document.getElementById('euro-cylinder-form').style.display = 'block'; }
+function closeEuroCylinderForm() {
+	document.getElementById('euro-cylinder-form').style.display = 'none';
+	selectedEuroCylinderPhoto = '';
+	document.getElementById('euro-cylinder-photo-preview').innerHTML = '';
+	document.getElementById('euro-cylinder-camera').value = '';
+	document.getElementById('euro-cylinder-library').value = '';
+}
+function handleEuroCylinderPhoto(event) {
+	const file = event.target.files[0]; if (!file) return;
+	const reader = new FileReader();
+	reader.onload = e => { const image = new Image(); image.onload = () => {
+		const scale = Math.min(1, 600 / Math.max(image.width, image.height));
+		const canvas = document.createElement('canvas'); canvas.width = image.width * scale; canvas.height = image.height * scale;
+		canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+		selectedEuroCylinderPhoto = canvas.toDataURL('image/jpeg', .5);
+		document.getElementById('euro-cylinder-photo-preview').innerHTML = `<img src="${selectedEuroCylinderPhoto}" onclick="showEuroCylinderPhoto(selectedEuroCylinderPhoto)" style="width:100px;height:100px;object-fit:cover;border-radius:10px;cursor:pointer"><p>Tap photo to view large</p>`;
+	}; image.src = e.target.result; }; reader.readAsDataURL(file);
+}
+document.getElementById('euro-cylinder-camera').addEventListener('change', handleEuroCylinderPhoto);
+document.getElementById('euro-cylinder-library').addEventListener('change', handleEuroCylinderPhoto);
+function saveExtraEuroCylinder() {
+	const description = document.getElementById('euro-cylinder-description').value.trim();
+	const quantity = parseInt(document.getElementById('euro-cylinder-quantity').value, 10) || 0;
+	if (!description) { alert('Please enter a product name.'); return; }
+	const extras = JSON.parse(localStorage.getItem('euro-cylinders_extras') || '[]');
+	extras.push({ id: 'euro-cylinders_' + Date.now(), description, quantity, photo: selectedEuroCylinderPhoto });
+	try { localStorage.setItem('euro-cylinders_extras', JSON.stringify(extras)); } catch (error) { alert('There is not enough space to save this photo.'); return; }
+	document.getElementById('euro-cylinder-description').value = '';
+	document.getElementById('euro-cylinder-quantity').value = '1'; closeEuroCylinderForm(); displayExtras('euro-cylinders');
+}
+function showEuroCylinderPhoto(photo) { if (!photo) return; document.getElementById('euro-cylinder-large-photo').src = photo; document.getElementById('euro-cylinder-photo-modal').style.display = 'flex'; }
+function closeEuroCylinderPhoto(event) { if (event) event.stopPropagation(); document.getElementById('euro-cylinder-photo-modal').style.display = 'none'; document.getElementById('euro-cylinder-large-photo').src = ''; }
+</script>
 </body>
 </html>
