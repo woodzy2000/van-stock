@@ -2,483 +2,238 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Door Locks - UPVC Repair Van Stock</title>
+<title>Door Locks - UPVC Repair Van Stock</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-    <style>
+<style>
 
-        .door-lock-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: nowrap;
-        }
+.door-lock-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
 
-        .door-lock-info {
-            flex: 1;
-            min-width: 120px;
-        }
+.door-lock-info {
+    flex: 1;
+    min-width: 130px;
+}
 
-        .door-lock-info strong {
-            display: block;
-            font-size: 18px;
-        }
+.door-lock-info strong {
+    display: block;
+    font-size: 17px;
+}
 
-        .door-lock-info span {
-            display: block;
-            margin-top: 4px;
-            font-size: 14px;
-        }
+.door-lock-info span {
+    display: block;
+    margin-top: 5px;
+    font-size: 14px;
+}
 
-        .door-lock-photo {
-            width: 90px;
-            height: 90px;
-            object-fit: contain;
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
+.door-lock-photo {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
 
-        .door-lock-item.low-stock {
-            border: 2px solid red;
-        }
+.door-lock-item.low-stock {
+    border: 2px solid #d00000;
+}
 
-        .door-lock-item.low-stock .qty {
-            color: red;
-            font-weight: bold;
-        }
+.door-lock-item.low-stock .qty {
+    color: #d00000;
+    font-weight: bold;
+}
 
-        #door-lock-photo-modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            inset: 0;
-            background: rgba(0,0,0,0.95);
-            align-items: center;
-            justify-content: center;
-        }
+.extra-delete {
+    background: #d00000 !important;
+    color: white !important;
+}
 
-        #door-lock-large-photo {
-            max-width: 95%;
-            max-height: 90%;
-            object-fit: contain;
-        }
+#door-lock-photo-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    align-items: center;
+    justify-content: center;
+}
 
-        .extra-door-lock-info {
-            flex: 1;
-            min-width: 120px;
-        }
+#door-lock-large-photo {
+    max-width: 95%;
+    max-height: 90%;
+    object-fit: contain;
+    border-radius: 10px;
+}
 
-        .extra-door-lock-info strong {
-            display: block;
-            font-size: 18px;
-        }
+#door-lock-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 40px;
+    color: white;
+    background: none;
+    border: none;
+}
 
-        .extra-door-lock-info span {
-            display: block;
-            margin-top: 4px;
-            font-size: 14px;
-        }
-
-    </style>
-
+</style>
 </head>
 
 <body>
 
 <div class="header">
-
     <h1>Door Locks</h1>
-
     <p>UPVC Repair - Van Stock</p>
-
 </div>
-
 
 <div class="container">
 
+<button class="menu-button" onclick="window.location='index.html'">
+    ← Back
+</button>
+
+<h2>Gearbox Locks</h2>
+
+<div id="door-lock-list"></div>
+
+<h2>Additional Door Locks</h2>
+
+<div id="door-lock-extra-list"></div>
+
+<button
+    class="menu-button"
+    type="button"
+    onclick="openDoorLockForm()">
+    ＋ Add Door Lock
+</button>
+
+
+<!-- ADD DOOR LOCK FORM -->
+
+<div
+    id="door-lock-form"
+    style="display:none;margin-top:20px;">
+
+    <h3>Add Door Lock</h3>
+
+    <label for="door-lock-description">
+        Lock Name
+    </label>
+
+    <input
+        id="door-lock-description"
+        type="text"
+        placeholder="Enter lock name"
+        style="width:100%;box-sizing:border-box;padding:12px;margin-top:5px;">
+
+
+    <label
+        for="door-lock-backset"
+        style="display:block;margin-top:15px;">
+        Backset
+    </label>
+
+    <input
+        id="door-lock-backset"
+        type="text"
+        placeholder="e.g. 35mm"
+        style="width:100%;box-sizing:border-box;padding:12px;margin-top:5px;">
+
+
+    <label
+        for="door-lock-quantity"
+        style="display:block;margin-top:15px;">
+        Quantity
+    </label>
+
+    <input
+        id="door-lock-quantity"
+        type="number"
+        value="0"
+        min="0"
+        style="width:100%;box-sizing:border-box;padding:12px;margin-top:5px;">
+
+
+    <label
+        style="display:block;margin-top:15px;">
+        Photo
+    </label>
+
+    <input
+        id="door-lock-camera"
+        type="file"
+        accept="image/*"
+        capture="environment"
+        hidden>
+
     <button
         class="menu-button"
-        onclick="window.location='index.html'">
-
-        ← Back
-
+        type="button"
+        onclick="document.getElementById('door-lock-camera').click()">
+        📷 Take Photo
     </button>
 
 
-    <h2>Gearbox Locks</h2>
+    <input
+        id="door-lock-library"
+        type="file"
+        accept="image/*"
+        hidden>
 
+    <button
+        class="menu-button"
+        type="button"
+        onclick="document.getElementById('door-lock-library').click()">
+        🖼️ Choose Photo
+    </button>
 
-    <!-- LOCK 1 -->
 
     <div
-        class="stock-item door-lock-item"
-        id="item-doorlock-1">
-
-        <div class="door-lock-info">
-
-            <strong>Era Vectis</strong>
-
-            <span>Backset: 35mm</span>
-
-        </div>
-
-        <img
-            class="door-lock-photo"
-            src="image1.png"
-            alt="Era Vectis 35mm"
-            onclick="showDoorLockPhoto(this.src)"
-        >
-
-        <button onclick="changeDoorLockQty('doorlock_1', -1)">
-            -
-        </button>
-
-        <span
-            class="qty"
-            id="doorlock_1">
-            0
-        </span>
-
-        <button onclick="changeDoorLockQty('doorlock_1', 1)">
-            +
-        </button>
-
+        id="door-lock-photo-preview"
+        style="margin-top:15px;text-align:center;">
     </div>
 
 
-    <!-- LOCK 2 -->
+    <!-- PERMANENT OPTION -->
 
-    <div
-        class="stock-item door-lock-item"
-        id="item-doorlock-2">
+    <label
+        style="display:flex;align-items:center;gap:10px;margin-top:20px;font-size:16px;">
 
-        <div class="door-lock-info">
+        <input
+            id="door-lock-permanent"
+            type="checkbox"
+            style="width:22px;height:22px;">
 
-            <strong>Era Vectis</strong>
+        Make this lock permanent
 
-            <span>Backset: 45mm</span>
-
-        </div>
-
-        <img
-            class="door-lock-photo"
-            src="image2.png"
-            alt="Era Vectis 45mm"
-            onclick="showDoorLockPhoto(this.src)"
-        >
-
-        <button onclick="changeDoorLockQty('doorlock_2', -1)">
-            -
-        </button>
-
-        <span
-            class="qty"
-            id="doorlock_2">
-            0
-        </span>
-
-        <button onclick="changeDoorLockQty('doorlock_2', 1)">
-            +
-        </button>
-
-    </div>
-
-
-    <!-- LOCK 3 -->
-
-    <div
-        class="stock-item door-lock-item"
-        id="item-doorlock-3">
-
-        <div class="door-lock-info">
-
-            <strong>Era Vectis Hook</strong>
-
-            <span>Backset: 35mm</span>
-
-        </div>
-
-        <img
-            class="door-lock-photo"
-            src="image3.png"
-            alt="Era Vectis Hook 35mm"
-            onclick="showDoorLockPhoto(this.src)"
-        >
-
-        <button onclick="changeDoorLockQty('doorlock_3', -1)">
-            -
-        </button>
-
-        <span
-            class="qty"
-            id="doorlock_3">
-            0
-        </span>
-
-        <button onclick="changeDoorLockQty('doorlock_3', 1)">
-            +
-        </button>
-
-    </div>
-
-
-    <!-- LOCK 4 -->
-
-    <div
-        class="stock-item door-lock-item"
-        id="item-doorlock-4">
-
-        <div class="door-lock-info">
-
-            <strong>Era Vectis Hook</strong>
-
-            <span>Backset: 45mm</span>
-
-        </div>
-
-        <img
-            class="door-lock-photo"
-            src="image4.png"
-            alt="Era Vectis Hook 45mm"
-            onclick="showDoorLockPhoto(this.src)"
-        >
-
-        <button onclick="changeDoorLockQty('doorlock_4', -1)">
-            -
-        </button>
-
-        <span
-            class="qty"
-            id="doorlock_4">
-            0
-        </span>
-
-        <button onclick="changeDoorLockQty('doorlock_4', 1)">
-            +
-        </button>
-
-    </div>
-
-
-    <!-- LOCK 5 -->
-
-    <div
-        class="stock-item door-lock-item"
-        id="item-doorlock-5">
-
-        <div class="door-lock-info">
-
-            <strong>Era</strong>
-
-            <span>Backset: 35mm</span>
-
-        </div>
-
-        <img
-            class="door-lock-photo"
-            src="image5.png"
-            alt="Era 35mm"
-            onclick="showDoorLockPhoto(this.src)"
-        >
-
-        <button onclick="changeDoorLockQty('doorlock_5', -1)">
-            -
-        </button>
-
-        <span
-            class="qty"
-            id="doorlock_5">
-            0
-        </span>
-
-        <button onclick="changeDoorLockQty('doorlock_5', 1)">
-            +
-        </button>
-
-    </div>
-
-
-    <!-- LOCK 6 -->
-
-    <div
-        class="stock-item door-lock-item"
-        id="item-doorlock-6">
-
-        <div class="door-lock-info">
-
-            <strong>Era</strong>
-
-            <span>Backset: 45mm</span>
-
-        </div>
-
-        <img
-            class="door-lock-photo"
-            src="image6.png"
-            alt="Era 45mm"
-            onclick="showDoorLockPhoto(this.src)"
-        >
-
-        <button onclick="changeDoorLockQty('doorlock_6', -1)">
-            -
-        </button>
-
-        <span
-            class="qty"
-            id="doorlock_6">
-            0
-        </span>
-
-        <button onclick="changeDoorLockQty('doorlock_6', 1)">
-            +
-        </button>
-
-    </div>
-
-
-    <h2>Additional Door Locks</h2>
-
-    <div id="door-locks-extras"></div>
+    </label>
 
 
     <button
         class="menu-button"
         type="button"
-        onclick="openDoorLockForm()">
-
-        ＋ Add Extra Door Lock
-
+        onclick="saveExtraDoorLock()"
+        style="margin-top:20px;">
+        Save Door Lock
     </button>
 
+    <button
+        class="menu-button"
+        type="button"
+        onclick="closeDoorLockForm()">
+        Cancel
+    </button>
 
-    <!-- ADD EXTRA FORM -->
-
-    <div
-        id="door-lock-form"
-        style="display:none; margin-top:20px;">
-
-        <h3>Add Extra Door Lock</h3>
-
-
-        <label>Name</label>
-
-        <input
-            type="text"
-            id="door-lock-description"
-            placeholder="Enter lock name"
-            style="width:100%;box-sizing:border-box;padding:12px;margin-top:5px;"
-        >
-
-
-        <label
-            style="display:block;margin-top:15px;">
-
-            Backset
-
-        </label>
-
-        <input
-            type="text"
-            id="door-lock-backset"
-            placeholder="e.g. 35mm"
-            style="width:100%;box-sizing:border-box;padding:12px;margin-top:5px;"
-        >
-
-
-        <label
-            style="display:block;margin-top:15px;">
-
-            Quantity
-
-        </label>
-
-        <input
-            type="number"
-            id="door-lock-quantity"
-            value="0"
-            min="0"
-            style="width:100%;box-sizing:border-box;padding:12px;margin-top:5px;"
-        >
-
-
-        <label
-            style="display:block;margin-top:15px;">
-
-            Photo
-
-        </label>
-
-
-        <input
-            type="file"
-            id="door-lock-camera"
-            accept="image/*"
-            capture="environment"
-            style="display:none;"
-        >
-
-
-        <button
-            class="menu-button"
-            type="button"
-            onclick="document.getElementById('door-lock-camera').click()">
-
-            📷 Take Photo
-
-        </button>
-
-
-        <input
-            type="file"
-            id="door-lock-library"
-            accept="image/*"
-            style="display:none;"
-        >
-
-
-        <button
-            class="menu-button"
-            type="button"
-            onclick="document.getElementById('door-lock-library').click()">
-
-            🖼️ Choose Photo
-
-        </button>
-
-
-        <div
-            id="door-lock-photo-preview"
-            style="margin-top:15px;text-align:center;">
-        </div>
-
-
-        <button
-            class="menu-button"
-            type="button"
-            onclick="saveExtraDoorLock()"
-            style="margin-top:20px;">
-
-            Save Door Lock
-
-        </button>
-
-
-        <button
-            class="menu-button"
-            type="button"
-            onclick="closeDoorLockForm()">
-
-            Cancel
-
-        </button>
-
-    </div>
+</div>
 
 </div>
 
@@ -492,16 +247,13 @@
     <img
         id="door-lock-large-photo"
         src=""
-        alt="Door lock photo"
-    >
+        alt="Door lock photo">
 
     <button
+        id="door-lock-close"
         type="button"
-        onclick="closeDoorLockPhoto(event)"
-        style="position:absolute;top:20px;right:20px;font-size:30px;background:none;border:none;color:white;">
-
+        onclick="closeDoorLockPhoto(event)">
         ×
-
     </button>
 
 </div>
@@ -509,76 +261,288 @@
 
 <script src="app.js"></script>
 
-
 <script>
 
-/* =========================
-   DOOR LOCK STOCK
-========================= */
+/* =========================================================
+   EXISTING 17 PERMANENT LOCKS
+   ========================================================= */
 
-const doorLockNames = {
+const doorLocks = [
 
-    doorlock_1: "Era Vectis 35mm",
+    {
+        id: "doorlock_1",
+        name: "Era Vectis",
+        backset: "35mm",
+        image: "door-lock-images/image1.png"
+    },
 
-    doorlock_2: "Era Vectis 45mm",
+    {
+        id: "doorlock_2",
+        name: "Era Vectis",
+        backset: "45mm",
+        image: "door-lock-images/image2.png"
+    },
 
-    doorlock_3: "Era Vectis Hook 35mm",
+    {
+        id: "doorlock_3",
+        name: "Era Vectis Hook",
+        backset: "35mm",
+        image: "door-lock-images/image3.png"
+    },
 
-    doorlock_4: "Era Vectis Hook 45mm",
+    {
+        id: "doorlock_4",
+        name: "Era Vectis Hook",
+        backset: "45mm",
+        image: "door-lock-images/image4.png"
+    },
 
-    doorlock_5: "Era 35mm",
+    {
+        id: "doorlock_5",
+        name: "Era",
+        backset: "35mm",
+        image: "door-lock-images/image5.png"
+    },
 
-    doorlock_6: "Era 45mm"
+    {
+        id: "doorlock_6",
+        name: "Era",
+        backset: "45mm",
+        image: "door-lock-images/image6.png"
+    },
 
-};
+    {
+        id: "doorlock_7",
+        name: "Era Hook",
+        backset: "35mm",
+        image: "door-lock-images/image7.png"
+    },
+
+    {
+        id: "doorlock_8",
+        name: "Era Hook",
+        backset: "45mm",
+        image: "door-lock-images/image8.png"
+    },
+
+    {
+        id: "doorlock_9",
+        name: "Lockmaster Gearbox Lift Lever",
+        backset: "35mm",
+        image: "door-lock-images/image9.png"
+    },
+
+    {
+        id: "doorlock_10",
+        name: "Safeware",
+        backset: "35mm",
+        image: "door-lock-images/image10.png"
+    },
+
+    {
+        id: "doorlock_11",
+        name: "Fullex XL",
+        backset: "35mm",
+        image: "door-lock-images/image11.png"
+    },
+
+    {
+        id: "doorlock_12",
+        name: "Fullex XL",
+        backset: "35mm",
+        image: "door-lock-images/image12.png"
+    },
+
+    {
+        id: "doorlock_13",
+        name: "Mila",
+        backset: "35mm",
+        image: "door-lock-images/image13.png"
+    },
+
+    {
+        id: "doorlock_14",
+        name: "G2000",
+        backset: "35mm",
+        image: "door-lock-images/image14.png"
+    },
+
+    {
+        id: "doorlock_15",
+        name: "Cego",
+        backset: "35mm",
+        image: "door-lock-images/image15.png"
+    },
+
+    {
+        id: "doorlock_16",
+        name: "Millenco Mantis 3",
+        backset: "35mm",
+        image: "door-lock-images/image16.png"
+    },
+
+    {
+        id: "doorlock_17",
+        name: "Lockmaster Hookbolt",
+        backset: "35mm",
+        image: "door-lock-images/image17.png"
+    }
+
+];
 
 
-/* =========================
+/* =========================================================
+   STANDARD LOCKS
+   ========================================================= */
+
+function displayDoorLocks() {
+
+    const area =
+        document.getElementById("door-lock-list");
+
+    area.innerHTML = "";
+
+    doorLocks.forEach(lock => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "stock-item door-lock-item";
+
+
+        const info =
+            document.createElement("div");
+
+        info.className =
+            "door-lock-info";
+
+
+        const name =
+            document.createElement("strong");
+
+        name.innerText =
+            lock.name;
+
+
+        const backset =
+            document.createElement("span");
+
+        backset.innerText =
+            "Backset: " + lock.backset;
+
+
+        info.appendChild(name);
+        info.appendChild(backset);
+
+
+        const photo =
+            document.createElement("img");
+
+        photo.className =
+            "door-lock-photo";
+
+        photo.src =
+            lock.image;
+
+        photo.alt =
+            lock.name;
+
+        photo.onclick =
+            () => showDoorLockPhoto(lock.image);
+
+
+        const minus =
+            document.createElement("button");
+
+        minus.innerText = "-";
+
+        minus.onclick =
+            () => changeDoorLockQty(lock.id,-1);
+
+
+        const qty =
+            document.createElement("span");
+
+        qty.className = "qty";
+
+        qty.id = lock.id;
+
+        qty.innerText =
+            getDoorLockQty(lock.id);
+
+
+        const plus =
+            document.createElement("button");
+
+        plus.innerText = "+";
+
+        plus.onclick =
+            () => changeDoorLockQty(lock.id,1);
+
+
+        item.appendChild(info);
+        item.appendChild(photo);
+        item.appendChild(minus);
+        item.appendChild(qty);
+        item.appendChild(plus);
+
+        area.appendChild(item);
+
+        updateDoorLockLowStock(lock.id);
+
+    });
+
+}
+
+
+/* =========================================================
    STANDARD QUANTITY
-========================= */
+   ========================================================= */
 
-function changeDoorLockQty(id, amount) {
+function getDoorLockQty(id) {
+
+    const saved =
+        localStorage.getItem("stock_" + id);
+
+    if (saved === null)
+        return 0;
+
+    return Math.max(
+        0,
+        parseInt(saved,10) || 0
+    );
+}
+
+
+function changeDoorLockQty(id,amount) {
 
     const qty =
         document.getElementById(id);
 
     if (!qty) return;
 
-
     let value =
-        parseInt(qty.innerText, 10) || 0;
-
+        parseInt(qty.innerText,10) || 0;
 
     value =
-        Math.max(
-            0,
-            value + amount
-        );
+        Math.max(0,value + amount);
 
-
-    qty.innerText = value;
-
+    qty.innerText =
+        value;
 
     localStorage.setItem(
         "stock_" + id,
         value
     );
 
-
-    localStorage.setItem(
-        "stock_name_" + id,
-        doorLockNames[id]
-    );
-
-
     updateDoorLockLowStock(id);
-
 }
 
 
-/* =========================
-   LOW STOCK
-========================= */
+/* =========================================================
+   RED AT ZERO
+   ========================================================= */
 
 function updateDoorLockLowStock(id) {
 
@@ -587,16 +551,13 @@ function updateDoorLockLowStock(id) {
 
     if (!qty) return;
 
-
     const item =
         qty.closest(".door-lock-item");
 
     if (!item) return;
 
-
     const value =
-        parseInt(qty.innerText, 10) || 0;
-
+        parseInt(qty.innerText,10) || 0;
 
     item.classList.toggle(
         "low-stock",
@@ -606,92 +567,9 @@ function updateDoorLockLowStock(id) {
 }
 
 
-/* =========================
-   LOAD STOCK
-========================= */
-
-function loadDoorLockStock() {
-
-    Object.keys(doorLockNames)
-        .forEach(function(id) {
-
-            const qty =
-                document.getElementById(id);
-
-            if (!qty) return;
-
-
-            const saved =
-                localStorage.getItem(
-                    "stock_" + id
-                );
-
-
-            if (saved !== null) {
-
-                qty.innerText = saved;
-
-            }
-
-
-            localStorage.setItem(
-                "stock_name_" + id,
-                doorLockNames[id]
-            );
-
-
-            updateDoorLockLowStock(id);
-
-        });
-
-}
-
-
-/* =========================
-   PHOTO VIEWER
-========================= */
-
-function showDoorLockPhoto(src) {
-
-    if (!src) return;
-
-
-    document.getElementById(
-        "door-lock-large-photo"
-    ).src = src;
-
-
-    document.getElementById(
-        "door-lock-photo-modal"
-    ).style.display = "flex";
-
-}
-
-
-function closeDoorLockPhoto(event) {
-
-    if (event) {
-
-        event.stopPropagation();
-
-    }
-
-
-    document.getElementById(
-        "door-lock-photo-modal"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "door-lock-large-photo"
-    ).src = "";
-
-}
-
-
-/* =========================
-   EXTRA FORM
-========================= */
+/* =========================================================
+   ADD FORM
+   ========================================================= */
 
 let selectedDoorLockPhoto = "";
 
@@ -711,20 +589,34 @@ function closeDoorLockForm() {
         "door-lock-form"
     ).style.display = "none";
 
-
     selectedDoorLockPhoto = "";
-
 
     document.getElementById(
         "door-lock-photo-preview"
     ).innerHTML = "";
 
+    document.getElementById(
+        "door-lock-description"
+    ).value = "";
+
+    document.getElementById(
+        "door-lock-backset"
+    ).value = "";
+
+    document.getElementById(
+        "door-lock-quantity"
+    ).value = "0";
+
+    document.getElementById(
+        "door-lock-permanent"
+    ).checked = false;
+
 }
 
 
-/* =========================
-   PHOTO INPUT
-========================= */
+/* =========================================================
+   PHOTO
+   ========================================================= */
 
 function handleDoorLockPhoto(event) {
 
@@ -733,10 +625,8 @@ function handleDoorLockPhoto(event) {
 
     if (!file) return;
 
-
     const reader =
         new FileReader();
-
 
     reader.onload =
         function(e) {
@@ -744,12 +634,10 @@ function handleDoorLockPhoto(event) {
             const image =
                 new Image();
 
-
             image.onload =
                 function() {
 
                     const maxSize = 600;
-
 
                     const scale =
                         Math.min(
@@ -761,30 +649,20 @@ function handleDoorLockPhoto(event) {
                             )
                         );
 
-
                     const canvas =
-                        document.createElement(
-                            "canvas"
-                        );
-
+                        document.createElement("canvas");
 
                     canvas.width =
                         Math.max(
                             1,
-                            Math.round(
-                                image.width * scale
-                            )
+                            image.width * scale
                         );
-
 
                     canvas.height =
                         Math.max(
                             1,
-                            Math.round(
-                                image.height * scale
-                            )
+                            image.height * scale
                         );
-
 
                     canvas
                         .getContext("2d")
@@ -795,7 +673,6 @@ function handleDoorLockPhoto(event) {
                             canvas.width,
                             canvas.height
                         );
-
 
                     selectedDoorLockPhoto =
                         canvas.toDataURL(
@@ -810,28 +687,43 @@ function handleDoorLockPhoto(event) {
 
                         '<img src="' +
                         selectedDoorLockPhoto +
-                        '" onclick="showDoorLockPhoto(selectedDoorLockPhoto)" style="width:100px;height:100px;object-fit:contain;background:white;border-radius:10px;cursor:pointer;">' +
-                        '<p>Tap photo to view large</p>';
+                        '" style="width:100px;height:100px;object-fit:contain;border-radius:8px;cursor:pointer" onclick="showDoorLockPhoto(selectedDoorLockPhoto)">' +
+
+                        "<p>Tap photo to view large</p>";
 
                 };
-
 
             image.src =
                 e.target.result;
 
         };
 
-
     reader.readAsDataURL(file);
 
 }
 
 
-/* =========================
-   EXTRAS
-========================= */
+document.getElementById(
+    "door-lock-camera"
+).addEventListener(
+    "change",
+    handleDoorLockPhoto
+);
 
-function getDoorLockExtras() {
+
+document.getElementById(
+    "door-lock-library"
+).addEventListener(
+    "change",
+    handleDoorLockPhoto
+);
+
+
+/* =========================================================
+   EXTRA LOCKS
+   ========================================================= */
+
+function getExtraDoorLocks() {
 
     try {
 
@@ -841,7 +733,7 @@ function getDoorLockExtras() {
             ) || "[]"
         );
 
-    } catch (error) {
+    } catch(e) {
 
         return [];
 
@@ -852,7 +744,7 @@ function getDoorLockExtras() {
 
 function saveExtraDoorLock() {
 
-    const description =
+    const name =
         document.getElementById(
             "door-lock-description"
         ).value.trim();
@@ -865,19 +757,26 @@ function saveExtraDoorLock() {
 
 
     const quantity =
-        parseInt(
-            document.getElementById(
-                "door-lock-quantity"
-            ).value,
-            10
-        ) || 0;
-
-
-    if (!description) {
-
-        alert(
-            "Please enter a lock name."
+        Math.max(
+            0,
+            parseInt(
+                document.getElementById(
+                    "door-lock-quantity"
+                ).value,
+                10
+            ) || 0
         );
+
+
+    const permanent =
+        document.getElementById(
+            "door-lock-permanent"
+        ).checked;
+
+
+    if (!name) {
+
+        alert("Please enter the lock name.");
 
         return;
 
@@ -886,9 +785,16 @@ function saveExtraDoorLock() {
 
     if (!backset) {
 
-        alert(
-            "Please enter the backset."
-        );
+        alert("Please enter the backset.");
+
+        return;
+
+    }
+
+
+    if (!selectedDoorLockPhoto) {
+
+        alert("Please add a photo.");
 
         return;
 
@@ -896,7 +802,7 @@ function saveExtraDoorLock() {
 
 
     const extras =
-        getDoorLockExtras();
+        getExtraDoorLocks();
 
 
     extras.push({
@@ -906,7 +812,7 @@ function saveExtraDoorLock() {
             Date.now(),
 
         description:
-            description,
+            name,
 
         backset:
             backset,
@@ -915,7 +821,10 @@ function saveExtraDoorLock() {
             quantity,
 
         photo:
-            selectedDoorLockPhoto
+            selectedDoorLockPhoto,
+
+        permanent:
+            permanent
 
     });
 
@@ -927,7 +836,7 @@ function saveExtraDoorLock() {
             JSON.stringify(extras)
         );
 
-    } catch (error) {
+    } catch(e) {
 
         alert(
             "The photo is too large to save. Please try another photo."
@@ -938,52 +847,195 @@ function saveExtraDoorLock() {
     }
 
 
-    document.getElementById(
-        "door-lock-description"
-    ).value = "";
-
-
-    document.getElementById(
-        "door-lock-backset"
-    ).value = "";
-
-
-    document.getElementById(
-        "door-lock-quantity"
-    ).value = "0";
-
-
     closeDoorLockForm();
 
-    displayDoorLockExtras();
+    displayExtraDoorLocks();
 
 }
 
 
-/* =========================
-   EXTRA QUANTITY
-========================= */
+/* =========================================================
+   DISPLAY EXTRA LOCKS
+   ========================================================= */
 
-function changeDoorLockExtraQty(id, amount) {
+function displayExtraDoorLocks() {
 
-    const extras =
-        getDoorLockExtras();
-
-
-    const extra =
-        extras.find(
-            item => item.id === id
+    const area =
+        document.getElementById(
+            "door-lock-extra-list"
         );
 
+    area.innerHTML = "";
 
-    if (!extra) return;
+
+    getExtraDoorLocks().forEach(lock => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "stock-item door-lock-item";
 
 
-    extra.quantity =
+        if (
+            (parseInt(lock.quantity,10) || 0)
+            === 0
+        ) {
+
+            item.classList.add(
+                "low-stock"
+            );
+
+        }
+
+
+        const info =
+            document.createElement("div");
+
+        info.className =
+            "door-lock-info";
+
+
+        const name =
+            document.createElement("strong");
+
+        name.innerText =
+            lock.description;
+
+
+        const backset =
+            document.createElement("span");
+
+        backset.innerText =
+            "Backset: " +
+            lock.backset;
+
+
+        info.appendChild(name);
+        info.appendChild(backset);
+
+
+        const photo =
+            document.createElement("img");
+
+        photo.className =
+            "door-lock-photo";
+
+        photo.src =
+            lock.photo;
+
+        photo.alt =
+            lock.description;
+
+        photo.onclick =
+            () => showDoorLockPhoto(lock.photo);
+
+
+        const minus =
+            document.createElement("button");
+
+        minus.innerText =
+            "-";
+
+        minus.onclick =
+            () => changeExtraDoorLockQty(
+                lock.id,
+                -1
+            );
+
+
+        const qty =
+            document.createElement("span");
+
+        qty.className =
+            "qty";
+
+        qty.innerText =
+            lock.quantity;
+
+
+        const plus =
+            document.createElement("button");
+
+        plus.innerText =
+            "+";
+
+        plus.onclick =
+            () => changeExtraDoorLockQty(
+                lock.id,
+                1
+            );
+
+
+        item.appendChild(info);
+
+        item.appendChild(photo);
+
+        item.appendChild(minus);
+
+        item.appendChild(qty);
+
+        item.appendChild(plus);
+
+
+        /*
+           ONLY NON-PERMANENT LOCKS
+           GET A DELETE BUTTON
+        */
+
+        if (!lock.permanent) {
+
+            const del =
+                document.createElement("button");
+
+            del.innerText =
+                "×";
+
+            del.className =
+                "extra-delete";
+
+            del.onclick =
+                () => deleteExtraDoorLock(
+                    lock.id
+                );
+
+            item.appendChild(del);
+
+        }
+
+
+        area.appendChild(item);
+
+    });
+
+}
+
+
+/* =========================================================
+   CHANGE EXTRA QUANTITY
+   ========================================================= */
+
+function changeExtraDoorLockQty(
+    id,
+    amount
+) {
+
+    const extras =
+        getExtraDoorLocks();
+
+    const lock =
+        extras.find(
+            x => x.id === id
+        );
+
+    if (!lock) return;
+
+
+    lock.quantity =
         Math.max(
             0,
             (parseInt(
-                extra.quantity,
+                lock.quantity,
                 10
             ) || 0) + amount
         );
@@ -995,236 +1047,115 @@ function changeDoorLockExtraQty(id, amount) {
     );
 
 
-    displayDoorLockExtras();
+    displayExtraDoorLocks();
 
 }
 
 
-/* =========================
-   DISPLAY EXTRAS
-========================= */
+/* =========================================================
+   DELETE NON-PERMANENT LOCK
+   ========================================================= */
 
-function displayDoorLockExtras() {
+function deleteExtraDoorLock(id) {
 
-    const area =
-        document.getElementById(
-            "door-locks-extras"
+    const extras =
+        getExtraDoorLocks();
+
+    const lock =
+        extras.find(
+            x => x.id === id
         );
 
+    if (!lock) return;
 
-    if (!area) return;
 
+    if (lock.permanent) {
 
-    area.innerHTML = "";
+        alert(
+            "This lock is permanent and cannot be deleted."
+        );
 
+        return;
 
-    getDoorLockExtras()
-        .forEach(function(extra) {
+    }
 
-            const item =
-                document.createElement(
-                    "div"
-                );
 
+    if (
+        !confirm(
+            "Remove this door lock?"
+        )
+    ) {
 
-            item.className =
-                "stock-item door-lock-item";
+        return;
 
+    }
 
-            if (
-                (parseInt(
-                    extra.quantity,
-                    10
-                ) || 0) === 0
-            ) {
 
-                item.classList.add(
-                    "low-stock"
-                );
+    localStorage.setItem(
+        "door-locks_extras",
+        JSON.stringify(
+            extras.filter(
+                x => x.id !== id
+            )
+        )
+    );
 
-            }
 
-
-            if (extra.photo) {
-
-                const photo =
-                    document.createElement(
-                        "img"
-                    );
-
-
-                photo.className =
-                    "door-lock-photo";
-
-
-                photo.src =
-                    extra.photo;
-
-
-                photo.alt =
-                    extra.description;
-
-
-                photo.onclick =
-                    function() {
-
-                        showDoorLockPhoto(
-                            extra.photo
-                        );
-
-                    };
-
-
-                item.appendChild(photo);
-
-            }
-
-
-            const info =
-                document.createElement(
-                    "div"
-                );
-
-
-            info.className =
-                "extra-door-lock-info";
-
-
-            const name =
-                document.createElement(
-                    "strong"
-                );
-
-
-            name.innerText =
-                extra.description;
-
-
-            const backset =
-                document.createElement(
-                    "span"
-                );
-
-
-            backset.innerText =
-                "Backset: " +
-                extra.backset;
-
-
-            info.appendChild(name);
-
-            info.appendChild(backset);
-
-            item.appendChild(info);
-
-
-            const minus =
-                document.createElement(
-                    "button"
-                );
-
-
-            minus.innerText =
-                "-";
-
-
-            minus.onclick =
-                function() {
-
-                    changeDoorLockExtraQty(
-                        extra.id,
-                        -1
-                    );
-
-                };
-
-
-            item.appendChild(minus);
-
-
-            const qty =
-                document.createElement(
-                    "span"
-                );
-
-
-            qty.className =
-                "qty";
-
-
-            qty.innerText =
-                extra.quantity;
-
-
-            item.appendChild(qty);
-
-
-            const plus =
-                document.createElement(
-                    "button"
-                );
-
-
-            plus.innerText =
-                "+";
-
-
-            plus.onclick =
-                function() {
-
-                    changeDoorLockExtraQty(
-                        extra.id,
-                        1
-                    );
-
-                };
-
-
-            item.appendChild(plus);
-
-
-            area.appendChild(item);
-
-        });
+    displayExtraDoorLocks();
 
 }
 
 
-/* =========================
-   PHOTO BUTTONS
-========================= */
+/* =========================================================
+   PHOTO VIEWER
+   ========================================================= */
 
-document
-    .getElementById(
-        "door-lock-camera"
-    )
-    .addEventListener(
-        "change",
-        handleDoorLockPhoto
-    );
+function showDoorLockPhoto(photo) {
+
+    if (!photo) return;
 
 
-document
-    .getElementById(
-        "door-lock-library"
-    )
-    .addEventListener(
-        "change",
-        handleDoorLockPhoto
-    );
+    document.getElementById(
+        "door-lock-large-photo"
+    ).src = photo;
 
 
-/* =========================
+    document.getElementById(
+        "door-lock-photo-modal"
+    ).style.display = "flex";
+
+}
+
+
+function closeDoorLockPhoto(event) {
+
+    if (event)
+        event.stopPropagation();
+
+
+    document.getElementById(
+        "door-lock-photo-modal"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "door-lock-large-photo"
+    ).src = "";
+
+}
+
+
+/* =========================================================
    START
-========================= */
+   ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     function() {
 
-        loadDoorLockStock();
+        displayDoorLocks();
 
-        displayDoorLockExtras();
+        displayExtraDoorLocks();
 
     }
 );
