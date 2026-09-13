@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order List - UPVC Repair</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.order-item { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.order-info { flex:1; }
+.order-info strong { display:block; font-size:17px; }
+.order-qty { font-weight:bold; min-width:25px; text-align:center; }
+.delete-order { background:#d00000 !important; color:white !important; }
+.empty-order { text-align:center; margin:30px 10px; color:#777; font-size:17px; }
+#order-form { margin-top:20px; }
+#order-form input { width:100%; box-sizing:border-box; padding:12px; margin-top:5px; font-size:16px; }
+</style>
+</head>
+<body>
+<div class="header"><h1>Order List</h1><p>UPVC Repair - Van Stock</p></div>
+<div class="container">
+<button class="menu-button" onclick="window.location='index.html'">← Back</button>
+<h2>Items to Order</h2>
+<div id="order-list"></div>
+<button class="menu-button" type="button" onclick="openOrderForm()">＋ Add Item to Order</button>
+<div id="order-form" style="display:none">
+<h3>Add Item</h3>
+<label for="order-name">Item Name</label>
+<input id="order-name" type="text" placeholder="Enter item name">
+<label for="order-quantity" style="display:block;margin-top:15px">Quantity</label>
+<input id="order-quantity" type="number" min="1" value="1">
+<button class="menu-button" type="button" onclick="saveOrderItem()" style="margin-top:20px">Save Item</button>
+<button class="menu-button" type="button" onclick="closeOrderForm()">Cancel</button>
+</div>
+<button id="clear-order" class="menu-button" type="button" onclick="clearOrderList()" style="margin-top:20px">Clear Order List</button>
+</div>
+<script>
+function getOrderList() {
+	try { return JSON.parse(localStorage.getItem("upvc-order-list") || "[]"); }
+	catch (e) { return []; }
+}
+function openOrderForm() { document.getElementById("order-form").style.display = "block"; document.getElementById("order-name").focus(); }
+function closeOrderForm() { document.getElementById("order-form").style.display = "none"; document.getElementById("order-name").value = ""; document.getElementById("order-quantity").value = "1"; }
+function saveOrderItem() {
+	const name = document.getElementById("order-name").value.trim();
+	const quantity = Math.max(1, parseInt(document.getElementById("order-quantity").value, 10) || 1);
+	if (!name) { alert("Please enter the item name."); return; }
+	const list = getOrderList();
+	const existing = list.find(item => item.name.toLowerCase() === name.toLowerCase());
+	if (existing) existing.quantity += quantity;
+	else list.push({ id:"order_" + Date.now(), name, quantity });
+	localStorage.setItem("upvc-order-list", JSON.stringify(list));
+	closeOrderForm(); displayOrderList();
+}
+function changeOrderQuantity(id, amount) {
+	const list = getOrderList(), item = list.find(x => x.id === id);
+	if (!item) return;
+	item.quantity = Math.max(1, item.quantity + amount);
+	localStorage.setItem("upvc-order-list", JSON.stringify(list)); displayOrderList();
+}
+function deleteOrderItem(id) {
+	const list = getOrderList(), item = list.find(x => x.id === id);
+	if (!item || !confirm("Remove " + item.name + " from the order list?")) return;
+	localStorage.setItem("upvc-order-list", JSON.stringify(list.filter(x => x.id !== id))); displayOrderList();
+}
+function clearOrderList() {
+	const list = getOrderList();
+	if (!list.length || !confirm("Clear the whole order list?")) return;
+	localStorage.removeItem("upvc-order-list"); displayOrderList();
+}
+function displayOrderList() {
+	const area = document.getElementById("order-list"), list = getOrderList();
+	area.innerHTML = "";
+	if (!list.length) { area.innerHTML = '<div class="empty-order">No items currently on the order list.</div>'; return; }
+	list.forEach(item => {
+		const row = document.createElement("div"); row.className = "stock-item order-item";
+		const info = document.createElement("div"); info.className = "order-info";
+		const name = document.createElement("strong"); name.innerText = item.name; info.appendChild(name);
+		const minus = document.createElement("button"); minus.innerText = "-"; minus.onclick = () => changeOrderQuantity(item.id, -1);
+		const quantity = document.createElement("span"); quantity.className = "order-qty"; quantity.innerText = item.quantity;
+		const plus = document.createElement("button"); plus.innerText = "+"; plus.onclick = () => changeOrderQuantity(item.id, 1);
+		const del = document.createElement("button"); del.innerText = "×"; del.className = "delete-order"; del.onclick = () => deleteOrderItem(item.id);
+		row.append(info, minus, quantity, plus, del); area.appendChild(row);
+	});
+}
+document.addEventListener("DOMContentLoaded", displayOrderList);
+</script>
+</body>
+</html>
