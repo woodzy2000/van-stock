@@ -3,87 +3,66 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Order List - UPVC Repair</title>
-<link rel="stylesheet" href="style.css">
+<title>Order List</title>
 <style>
-.order-item { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-.order-info { flex:1; }
-.order-info strong { display:block; font-size:17px; }
-.order-qty { font-weight:bold; min-width:25px; text-align:center; }
-.delete-order { background:#d00000 !important; color:white !important; }
-.empty-order { text-align:center; margin:30px 10px; color:#777; font-size:17px; }
-#order-form { margin-top:20px; }
-#order-form input { width:100%; box-sizing:border-box; padding:12px; margin-top:5px; font-size:16px; }
+body { font-family: Arial, sans-serif; background:#f4f4f4; margin:0; padding:15px; }
+.container { max-width:600px; margin:auto; }
+h1 { text-align:center; }
+.back { display:block; width:100%; padding:12px; margin-bottom:15px; background:#333; color:white; border:0; border-radius:8px; font-size:16px; }
+.add-btn, .save-btn, .cancel-btn, .clear-btn { width:100%; padding:12px; border:0; border-radius:8px; font-size:16px; margin-top:8px; }
+.add-btn { background:#222; color:white; }
+.save-btn { background:#198754; color:white; }
+.cancel-btn { background:#777; color:white; }
+.clear-btn { background:#b00020; color:white; margin-top:20px; }
+.form { background:white; padding:15px; border-radius:10px; margin-top:15px; }
+label { display:block; font-weight:bold; margin-top:10px; }
+input[type="text"], input[type="number"] { width:100%; box-sizing:border-box; padding:12px; margin-top:5px; border:1px solid #ccc; border-radius:8px; font-size:16px; }
+.photo-buttons { display:flex; gap:8px; margin-top:8px; }
+.photo-buttons button { flex:1; padding:12px; border:1px solid #aaa; border-radius:8px; background:#eee; font-size:15px; }
+#photoPreview { display:none; width:100%; max-height:250px; object-fit:contain; margin-top:10px; border-radius:8px; }
+.order-item { display:grid; grid-template-columns:80px 1fr; gap:12px; background:white; padding:12px; margin-top:10px; border-radius:10px; align-items:center; }
+.order-photo { width:80px; height:80px; border-radius:8px; object-fit:cover; background:#eee; }
+.order-name { font-size:17px; font-weight:bold; }
+.order-qty { margin-top:6px; }
+.qty-buttons { display:flex; align-items:center; gap:8px; margin-top:8px; }
+.qty-buttons button { width:42px; height:42px; border:0; border-radius:8px; background:#ddd; font-size:22px; }
+.delete-btn { background:#b00020 !important; color:white; font-size:16px !important; }
+.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.85); justify-content:center; align-items:center; padding:20px; z-index:999; }
+.modal img { max-width:100%; max-height:90%; border-radius:8px; }
+@media (max-width:420px) { .order-item { grid-template-columns:65px 1fr; } .order-photo { width:65px; height:65px; } }
 </style>
 </head>
 <body>
-<div class="header"><h1>Order List</h1><p>UPVC Repair - Van Stock</p></div>
 <div class="container">
-<button class="menu-button" onclick="window.location='index.html'">← Back</button>
-<h2>Items to Order</h2>
+<button class="back" onclick="window.location='index.html'">← Back</button>
+<h1>Order List</h1>
 <div id="order-list"></div>
-<button class="menu-button" type="button" onclick="openOrderForm()">＋ Add Item to Order</button>
-<div id="order-form" style="display:none">
-<h3>Add Item</h3>
-<label for="order-name">Item Name</label>
-<input id="order-name" type="text" placeholder="Enter item name">
-<label for="order-quantity" style="display:block;margin-top:15px">Quantity</label>
-<input id="order-quantity" type="number" min="1" value="1">
-<button class="menu-button" type="button" onclick="saveOrderItem()" style="margin-top:20px">Save Item</button>
-<button class="menu-button" type="button" onclick="closeOrderForm()">Cancel</button>
+<button class="add-btn" onclick="showForm()">＋ Add Item to Order</button>
+<div id="form" class="form" style="display:none;">
+<label>Item Name</label><input type="text" id="itemName" placeholder="Enter item name">
+<label>Quantity</label><input type="number" id="itemQty" min="1" value="1">
+<label>Photo (optional)</label>
+<div class="photo-buttons"><button type="button" onclick="document.getElementById('cameraInput').click()">📷 Take Photo</button><button type="button" onclick="document.getElementById('libraryInput').click()">🖼️ Choose Photo</button></div>
+<input id="cameraInput" type="file" accept="image/*" capture="environment" style="display:none;" onchange="handlePhoto(this)"><input id="libraryInput" type="file" accept="image/*" style="display:none;" onchange="handlePhoto(this)">
+<img id="photoPreview" alt="Photo preview"><button class="save-btn" onclick="saveItem()">Save Item</button><button class="cancel-btn" onclick="hideForm()">Cancel</button>
 </div>
-<button id="clear-order" class="menu-button" type="button" onclick="clearOrderList()" style="margin-top:20px">Clear Order List</button>
+<button class="clear-btn" onclick="clearList()">Clear Order List</button>
 </div>
+<div id="photoModal" class="modal" onclick="closePhoto()"><img id="largePhoto" alt="Large order photo"></div>
 <script>
-function getOrderList() {
-	try { return JSON.parse(localStorage.getItem("upvc-order-list") || "[]"); }
-	catch (e) { return []; }
-}
-function openOrderForm() { document.getElementById("order-form").style.display = "block"; document.getElementById("order-name").focus(); }
-function closeOrderForm() { document.getElementById("order-form").style.display = "none"; document.getElementById("order-name").value = ""; document.getElementById("order-quantity").value = "1"; }
-function saveOrderItem() {
-	const name = document.getElementById("order-name").value.trim();
-	const quantity = Math.max(1, parseInt(document.getElementById("order-quantity").value, 10) || 1);
-	if (!name) { alert("Please enter the item name."); return; }
-	const list = getOrderList();
-	const existing = list.find(item => item.name.toLowerCase() === name.toLowerCase());
-	if (existing) existing.quantity += quantity;
-	else list.push({ id:"order_" + Date.now(), name, quantity });
-	localStorage.setItem("upvc-order-list", JSON.stringify(list));
-	closeOrderForm(); displayOrderList();
-}
-function changeOrderQuantity(id, amount) {
-	const list = getOrderList(), item = list.find(x => x.id === id);
-	if (!item) return;
-	item.quantity = Math.max(1, item.quantity + amount);
-	localStorage.setItem("upvc-order-list", JSON.stringify(list)); displayOrderList();
-}
-function deleteOrderItem(id) {
-	const list = getOrderList(), item = list.find(x => x.id === id);
-	if (!item || !confirm("Remove " + item.name + " from the order list?")) return;
-	localStorage.setItem("upvc-order-list", JSON.stringify(list.filter(x => x.id !== id))); displayOrderList();
-}
-function clearOrderList() {
-	const list = getOrderList();
-	if (!list.length || !confirm("Clear the whole order list?")) return;
-	localStorage.removeItem("upvc-order-list"); displayOrderList();
-}
-function displayOrderList() {
-	const area = document.getElementById("order-list"), list = getOrderList();
-	area.innerHTML = "";
-	if (!list.length) { area.innerHTML = '<div class="empty-order">No items currently on the order list.</div>'; return; }
-	list.forEach(item => {
-		const row = document.createElement("div"); row.className = "stock-item order-item";
-		const info = document.createElement("div"); info.className = "order-info";
-		const name = document.createElement("strong"); name.innerText = item.name; info.appendChild(name);
-		const minus = document.createElement("button"); minus.innerText = "-"; minus.onclick = () => changeOrderQuantity(item.id, -1);
-		const quantity = document.createElement("span"); quantity.className = "order-qty"; quantity.innerText = item.quantity;
-		const plus = document.createElement("button"); plus.innerText = "+"; plus.onclick = () => changeOrderQuantity(item.id, 1);
-		const del = document.createElement("button"); del.innerText = "×"; del.className = "delete-order"; del.onclick = () => deleteOrderItem(item.id);
-		row.append(info, minus, quantity, plus, del); area.appendChild(row);
-	});
-}
-document.addEventListener("DOMContentLoaded", displayOrderList);
+let orders=JSON.parse(localStorage.getItem('upvc-order-list'))||[],selectedPhoto='';
+function saveOrders(){localStorage.setItem('upvc-order-list',JSON.stringify(orders));}
+function showForm(){document.getElementById('form').style.display='block';}
+function hideForm(){document.getElementById('form').style.display='none';document.getElementById('itemName').value='';document.getElementById('itemQty').value='1';selectedPhoto='';let p=document.getElementById('photoPreview');p.src='';p.style.display='none';}
+function handlePhoto(input){let file=input.files[0];if(!file)return;let reader=new FileReader();reader.onload=e=>{let img=new Image();img.onload=()=>{let max=600,w=img.width,h=img.height;if(w>h&&w>max){h=Math.round(h*max/w);w=max;}else if(h>max){w=Math.round(w*max/h);h=max;}let c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);selectedPhoto=c.toDataURL('image/jpeg',.5);let p=document.getElementById('photoPreview');p.src=selectedPhoto;p.style.display='block';};img.src=e.target.result;};reader.readAsDataURL(file);}
+function saveItem(){let name=document.getElementById('itemName').value.trim(),qty=parseInt(document.getElementById('itemQty').value,10);if(!name){alert('Please enter an item name.');return;}if(!qty||qty<1){alert('Please enter a valid quantity.');return;}let existing=orders.find(i=>i.name.toLowerCase()===name.toLowerCase());try{if(existing){existing.quantity+=qty;if(selectedPhoto)existing.photo=selectedPhoto;}else orders.push({id:'order_'+Date.now(),name,quantity:qty,photo:selectedPhoto});saveOrders();hideForm();displayOrders();}catch(e){alert('The photo is too large to save. Please try another photo.');}}
+function changeQty(i,a){orders[i].quantity=Math.max(1,orders[i].quantity+a);saveOrders();displayOrders();}
+function deleteItem(i){if(confirm('Remove this item from the order list?')){orders.splice(i,1);saveOrders();displayOrders();}}
+function clearList(){if(orders.length&&confirm('Clear the entire order list?')){orders=[];saveOrders();displayOrders();}}
+function showPhoto(p){if(p){document.getElementById('largePhoto').src=p;document.getElementById('photoModal').style.display='flex';}}
+function closePhoto(){document.getElementById('photoModal').style.display='none';}
+function displayOrders(){let c=document.getElementById('order-list');if(!orders.length){c.innerHTML='<p style="text-align:center;color:#666;">No items in your order list.</p>';return;}c.innerHTML=orders.map((i,n)=>`<div class="order-item">${i.photo?`<img class="order-photo" src="${i.photo}" alt="${escapeHtml(i.name)}" onclick="showPhoto('${i.photo}')">`:'<div class="order-photo" style="display:flex;align-items:center;justify-content:center;font-size:28px;">📷</div>'}<div><div class="order-name">${escapeHtml(i.name)}</div><div class="order-qty">Quantity: ${i.quantity}</div><div class="qty-buttons"><button onclick="changeQty(${n},-1)">−</button><button onclick="changeQty(${n},1)">+</button><button class="delete-btn" onclick="deleteItem(${n})">Delete</button></div></div></div>`).join('');}
+function escapeHtml(t){let d=document.createElement('div');d.textContent=t;return d.innerHTML;}displayOrders();
 </script>
 </body>
 </html>
