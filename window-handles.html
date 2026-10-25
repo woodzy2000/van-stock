@@ -43,9 +43,8 @@ function handleWindowHandlePhoto(e){const file=e.target.files[0];if(!file)return
 document.getElementById('handle-camera').addEventListener('change',handleWindowHandlePhoto);document.getElementById('handle-library').addEventListener('change',handleWindowHandlePhoto);
 function saveExtraHandle(){const description=document.getElementById('handle-description').value.trim(),quantity=parseInt(document.getElementById('handle-quantity').value,10)||0;if(!description){alert('Please enter a product name.');return}const extras=JSON.parse(localStorage.getItem('handles_extras')||'[]');extras.push({id:'handles_'+Date.now(),description,quantity,photo:selectedHandlePhoto});try{localStorage.setItem('handles_extras',JSON.stringify(extras))}catch(e){alert('There is not enough space to save this photo.');return}document.getElementById('handle-description').value='';document.getElementById('handle-quantity').value='1';closeHandleForm();displayExtras('handles')}
 function showHandlePhoto(photo){if(photo){document.getElementById('handle-large-photo').src=photo;document.getElementById('handle-photo-modal').style.display='flex'}}function closeHandlePhoto(e){if(e)e.stopPropagation();document.getElementById('handle-photo-modal').style.display='none';document.getElementById('handle-large-photo').src=''}
-</script>
-function clearWindowHandleExtras() {
 
+function clearWindowHandleExtras() {
     if (!confirm(
         "This will remove all Additional Window Handles and their photos. Continue?"
     )) {
@@ -64,5 +63,6 @@ function clearWindowHandleExtras() {
         "Additional Window Handles have been cleared."
     );
 }
+</script>
 </body>
 </html>
